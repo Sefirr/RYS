@@ -1,0 +1,62 @@
+Cifrado histórico: Máquina Enigma
+¿Qué dificultades se han encontrado en la (de)codificación de los mensajes y transmisión de los mismos así como de las claves?
+Tanto para la codificación como en la decodificación ambos (emisor y receptor) tienen que tener la misma posición de los rotores y las mismas conexiones para entenderse entre ellos.
+Esto es tener la misma clave.
+Las dificultades en cuanto a la clave es la distribución de la clave.
+¿Qué método se podría implantar para la difusión segura de clave?
+Se podría utilizar una distribución manual de las claves, una centralizada y una certificada. De menos a más segura en orden ascendente.
+
+Herramientas de hashing
+¿Aumenta el tamaño del mismo con un texto más grande?
+No.
+¿Qué se puede deducir de ambos programas tras ejecutar los comandos?
+Tienen el mismo hash md5 pero distinto hash en sha1sum.
+Ejecutar los dos programas. ¿A qué podría deberse este fenómeno?
+Hay colisiones en md5, es decir, dos programas totalmente distintos tienen el mismo hash md5.
+
+Cifrado simétrico
+¿Cuál es la regla que sigue el tamaño del texto cifrado en función del texto plano y la clave?
+El tamaño del texto cifrado siempre será múltiplo del tamaño de bloque. El tamaño de bloque en este caso es de 128 bits.
+
+Steganografía
+1. Averiguar cuántos bytes útiles para ocultar archivos tienen las imágenes.
+steghide info ARCHIVO
+2. Hacer una copia de SpyCam.jpg. Ocultar el archivo background.txt en SpyCam.jpg. ¿En qué otras imágenes se puede ocultar?
+cd /home/ubuntu/Pictures
+cp SpyCam.jpg copia.jpg
+steghide embed -cf copia.jpg -ef /home/ubuntu/Documents/SamFisher/background.txt pass: jamon
+En todas menos la de SamFisher.jpg y la de NightVision.jpg
+3. Verificar que la ocultación se ha realizado con éxito. Comparar visualmente la imagen con la copia realizada antes de la ocultación.
+Las imagenes parecen prácticamente iguales.
+4. Extraer el archivo (background.txt) y borrarlo del directorio de las imágenes.
+steghide extract -sf copia.jpg pass:jamon
+rm background.txt
+
+1. Crear un fichero de texto llamado mensaje.txt en el que introduzcamos una palabra. Ocultar mensaje.txt en Madrid.jpg.
+Después ocultar abilities.txt en Madrid.jpg con una clave diferente.
+echo "palabra" > mensaje.txt
+steghide -cf Madrid.jpg -ef mensaje.txt pass: jamon1
+steghide embed -cf Madrid.jpg -ef /home/ubuntu/Documents/SamFisher/abilities.txt pass: jamon2 
+2. Extraer el fichero oculto en Madrid.jpg. ¿Qué fichero se obtiene?
+steghide extract -sf Madrid.jpg
+Si se utiliza la contraseña correspondiente a la primera ocultación dice que el fichero está corrupto ya que solo se puede obtener el último.
+Y si se utiliza la contraseña correspondiente a la segunda ocutlación. Se extrae el fichero correctamente.
+3. Ocultar mensaje.txt en SamFisher.jpg. Ocultar SamFisher.jpg en Madrid.jpg con una clave distinta. Copiar Madrid.jpg a /home/ubuntu/.
+steghide embed -cf SamFisher.jpg -ef mensaje.txt pass: jamon1
+steghide embed -cf Madrid.jpg -ef SamFisher.jpg pass: jamon2
+cp Madrid.jpg /home/ubuntu/
+4. En /home/ubuntu/ extraeremos el fichero contenido en Madrid.jpg (SamFisher.jpg). De éste extraeremos mensaje.txt.
+cd /home/ubuntu/
+steghide extract -sf Madrid.jpg
+steghide extract -sf SamFisher.jpg
+
+Cifrado del sistema de ficheros
+1. Crear un nuevo volumen con las siguientes características:
+• Disco cifrado en un fichero (/home/ubuntu/vault1) con formato Linux ext4
+• Volumen estándar (no oculto) de 50 MB que no se permitirá montar en otras plataformas
+• Cifrado con una combinación de 3 algoritmos en cascada
+2. Montar el volumen en TrueCrypt, copiar las imágenes que hemos empleado en la parte de steganografía y desmontarlo
+3. Crear un nuevo volumen (/home/ubuntu/vault2/) con las mismas características del anterior pero con las siguientes
+excepciones:
+• Volumen oculto
+• Usando dos ficheros de contraseña (keyfiles) en vez de un texto (las imágenes con las que se ha trabajado antes servirán).

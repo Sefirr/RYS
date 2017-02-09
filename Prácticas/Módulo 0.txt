@@ -1,0 +1,125 @@
+Obteniendo información de los comandos
+Preguntar a los compañeros y buscar en Google son una buena idea, pero
+no siempre disponemos de conexión a Internet.
+1. La mayoría de los comandos admiten el parámetro --help o -h.
+Obtener información de los comandos ls, cat y tee.
+ls --help | nano help
+cat --help | nano cat
+tee --help | nano tee
+2. También la mayoría de los comandos disponen de una página de
+manual a la que se puede acceder ejecutando man <COMANDO>.
+Para salir del mismo hay que pulsar la tecla q. Obtener información de
+los comandos anteriores.
+
+man ls
+man cat
+man tee
+
+Gestión de procesos
+El comando para visualizar los procesos es ps. Con el parámetro -ef
+podremos ver todos los procesos que se ejecutan en el sistema.
+1. En una terminal ejecutaremos sleep 500 (esperar 500 segundos) y en
+otra ejecutaremos ps –ef|grep sleep para localizarlo.
+2. ¿Qué procesos está ejecutando nuestro usuario (ubuntu)?
+ps -U ubuntu -u ubuntu
+Con pgrep obtenemos el PID (identificador) del proceso que le pasemos
+como argumento.
+1. ¿Qué PID tiene el proceso asociado al sleep? Es posible que haya que
+volver a ejecutarlo.
+sleep 500
+pgrep -f 'sleep 500'
+El comando kill manda por defecto la señal de apagado (equivalente a
+pulsar CTRL+C) al proceso cuyo identificador de proceso (PID) le
+pasemos.
+1. Apagar el proceso del sleep. 
+kill <PID>
+2. Al comando pkill sólo se le debe pasar el nombre del proceso y no su
+identificador. Volver a ejecutar sleep 500 y matarlo con pkill.
+sleep 500
+pkill -f 'sleep 500'
+Podemos ejecutar procesos en segundo plano al pasarle al completar el
+comando con el símbolo &.
+1. Lanzar sleep 500 en segundo plano. Ponerlo en primer plano
+ejecutando fg.
+sleep 500 &
+jobs -> 1
+fg 1
+2. Lanzar sleep 500 en primer plano. Parar el proceso con CTRL+Z y
+luego pasarlo a segundo plano con bg.
+sleep 500
+CTRL+Z
+jobs -> 1 
+bg 1
+
+Sistema de ficheros
+El comando ls nos permite visualizar el contenido del directorio que le
+pasemos como parámetro (por defecto, en el que estamos ubicados).
+1. Listar el contenido del directorio raíz (/).
+ls /
+2. Averiguar qué parámetro se necesita para obtener la mayor información en el listado.
+-l
+3. Averiguar qué parámetro permite mostrar los archivos ocultos (probar en el directorio del usuario: /home/ubuntu/)
+-a
+El comando cd nos desplaza por el árbol de directorios y pwd nos muestra
+en qué directorio estamos.
+Las rutas absolutas son aquellas que parten del directorio raíz y por tanto
+comienzan por /. Las relativas lo son desde el directorio en el que nos
+encontramos y por tanto no empiezan por /.
+Si ejecutamos cd sin suministrarle un parámetro, iremos al directorio del
+usuario.
+1. Desplazarnos al directorio /etc dando su dirección absoluta y ejecutar
+pwd.
+cd /etc
+pwd
+2. Desplazarnos al directorio raíz y de ahí, al /etc usando su dirección
+relativa. Ejecutar pwd.
+cd /
+cd etc/
+pwd
+El comando mkdir crea un directorio con el nombre que le facilitemos.
+El comando mv mueve un archivo/directorio desde un origen a un destino que le pasemos como parámetro. Por otro lado, cp copia el
+archivo/directorio.
+
+El comando rm borra archivos.
+Desde /home/ubuntu: cd /home/ubùntu
+1. Crear dos directorios en el directorio del usuario llamados nsa y 3ech.
+mkdir nsa
+mkdir 3ech
+2. Mover 3ech dentro de nsa.
+mv 3ech/ nsa/
+3. Ejecutar touch para colocar un archivo llamado bug dentro de nsa.
+touch nsa/bug
+4. Ejecutaremos rm * (borrar todo) dentro de nsa. ¿Qué sucede?
+rm nsa/*
+rm: cannot remove `3ech': Is a directory
+5. Volveremos a colocar el archivo bug y esta vez borraremos con los
+parámetros -Rf.
+touch nsa/bug
+rm -Rf nsa/*
+
+IMPORTANTE: El comando rm * -Rf ejecutado en un lugar equivocado puede tener consecuencias catastróficas
+
+Redirección y encadenamiento de comandos
+Con el símbolo > redirigimos la salida estándar de un comando a un archivo que indiquemos. Si usamos 2>, se redirigirá la salida de error.
+1. Redirigir la salida del listado de archivos que hay en el raíz a un archivo llamado output en el directorio del usuario.
+ls / > output
+2. Redirigir la salida de error de visualizar el archivo /etc/shadow con el comando cat a un archivo llamado error en el directorio del usuario.
+cat /etc/shadow 2> error
+
+Podemos encadenar la salida de un comando con la entrada de otro empleando el símbolo | (conocido también como pipe).
+3. Redirigir la salida del listado de archivos que hay en el raíz a un archivo llamado output en el directorio del usuario.
+ls / | tee output > /dev/null
+
+Visualización y edición de archivos de texto
+El comando more se emplea para visualizar archivos de texto largos (que ocupan más de una pantalla). Con retorno y f avanzamos páginas, con espacio avanzamos líneas y con b retrocedemos páginas. Para salir, pulsaremos q.
+1. Visualizar el fichero /var/log/dmesg y navegar por él.
+
+
+Tenemos varios editores para elegir. Entre ellos están nano y vim.tiny (o vim según el sistema). Es fundamental hacernos a uno de estos para las prácticas.
+2. Crear un archivo de texto en nuestro directorio de usuario.
+3. Introducir nuestros datos personales (uno por línea), guardar los cambios y salir.
+4. Volver a abrir el archivo y borrar la penúltima línea. Guardar y salir.
+5. Añadir (RyS) a continuación del nombre (en la misma línea). Guardar
+y salir.
+
+

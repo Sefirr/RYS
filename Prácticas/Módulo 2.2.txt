@@ -1,0 +1,21 @@
+Firma y instalación del Certificado para el servidor web
+¿Qué problema surge y por qué?
+El sitio no es seguro porque no se ha establecido la confianza en la AC Raíz
+
+Estableciendo la confianza en la AC Raíz
+¿Por qué no hay problemas en la conexión si se importó el certificado de la AC Raíz (Third Echelon CA) habiendo sido la Sub-AC (Third Echelon Network CA) la que emitió el certificado del servidor?
+Un certificado raíz es un certificado emitido por la Autoridad de Certificación para sí misma, y al constar en este certificado de la clave pública de la Autoridad de Certificación, es el único necesario para comprobar la autenticidad de cualquier certificado emitido por ella ya que es el certificado origen de la cadena de confianza.
+
+Instalación del certificado en el sistema
+Copy the CA .crt file to this directory:
+sudo cp thirdechelonCA-cacert.crt /usr/local/share/ca-certificates/
+update-ca-certificates
+Add the exception when you look up https://thirdechelon
+¿Qué ventajas y desventajas tiene instalar el certificado en el sistema?
+Ventajas
+Mantener tu información protegida, ya que sólo se envía al dispositivo correcto. Esto es muy importante ya que la información dada es enviada desde un ordenador a otro.
+Autentificar la identidad del usuario, de forma electrónica, ante terceros.
+Cifrar datos para que sólo el destinatario del documento pueda acceder a su contenido.
+Desventajas
+El uso de un certificado SSL es muy costoso, esto puede ser el número uno de las desventajas.
+Se requiere más recursos del servidor cuando se envía la información cifrada. La diferencia en el rendimiento se verá en los sitios web que reciben gran cantidad de tráfico de información.

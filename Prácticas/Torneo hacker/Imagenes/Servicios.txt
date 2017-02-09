@@ -1,0 +1,646 @@
+Services
+========
+
+host         port   proto  name            state  info
+----         ----   -----  ----            -----  ----
+192.168.1.3  21     tcp    ftp             open   
+192.168.1.3  22     tcp    ssh             open   SSH-2.0-OpenSSH_4.7p1 Debian-8ubuntu1
+192.168.1.3  23     tcp    telnet          open   _                  _       _ _        _     _      ____  \x0a _ __ ___   ___| |_ __ _ ___ _ __ | | ___ (_) |_ __ _| |__ | | ___|___ \ \x0a| '_ ` _ \ / _ \ __/ _` / __| '_ \| |/ _ \| | __/ _` | '_ \| |/ _ \ __) |\x0a| | | | | |  __/ || (_| \__ \ |_) | | (_) | | || (_| | |_) | |  __// __/ \x0a|_| |_| |_|\___|\__\__,_|___/ .__/|_|\___/|_|\__\__,_|_.__/|_|\___|_____|\x0a                            |_|                                          \x0a\x0a\x0aWarning: Never expose this VM to an untrusted network!\x0a\x0aContact: msfdev[at]metasploit.com\x0a\x0aLogin with msfadmin/msfadmin to get started\x0a\x0a\x0ametasploitable login:
+192.168.1.3  25     tcp    smtp            open   220 metasploitable.localdomain ESMTP Postfix (Ubuntu)
+
+192.168.1.3  53     tcp    dns             open   
+192.168.1.3  53     udp    dns             open   
+192.168.1.3  69     udp    tftp            open   
+192.168.1.3  80     tcp    www             open   
+192.168.1.3  111    udp    rpc-portmapper  open   
+192.168.1.3  111    tcp    rpc-portmapper  open   
+192.168.1.3  137    udp    netbios-ns      open   
+192.168.1.3  139    tcp    smb             open   
+192.168.1.3  445    tcp    cifs            open   
+192.168.1.3  512    tcp    rexecd          open   
+192.168.1.3  513    tcp    rlogin          open   
+192.168.1.3  514    tcp                    open   
+192.168.1.3  1099   tcp    rmi_registry    open   
+192.168.1.3  1524   tcp    wild_shell      open   
+192.168.1.3  2049   udp    rpc-nfs         open   
+192.168.1.3  2049   tcp    rpc-nfs         open   
+192.168.1.3  2121   tcp    ftp             open   
+192.168.1.3  3306   tcp    mysql           open   
+192.168.1.3  3632   tcp                    open   
+192.168.1.3  5432   tcp    postgres        open   
+192.168.1.3  5900   tcp    vnc             open   
+192.168.1.3  6000   tcp    x11             open   
+192.168.1.3  6667   tcp    irc             open   
+192.168.1.3  8009   tcp    ajp13           open   
+192.168.1.3  8180   tcp    http            open   Apache-Coyote/1.1 ( 401-Basic realm="Tomcat Manager Application" )
+192.168.1.3  8787   tcp                    open   
+192.168.1.3  34396  udp    rpc-nlockmgr    open   
+192.168.1.3  35105  udp    rpc-mountd      open   
+192.168.1.3  35425  tcp    rpc-mountd      open   
+192.168.1.3  38992  tcp    rpc-nlockmgr    open   
+192.168.1.3  49020  udp    rpc-status      open   
+192.168.1.3  55516  tcp    rpc-status      open
+
+Servicio FTP
+vulns -s ftp
+Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Backported Security Patch Detection (FTP) refs=NSS-39519 
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=vsftpd Smiley Face Backdoor refs=BID-48539,OSVDB-73573,EDB-ID-17491,MSF-VSFTPD v2.3.4 Backdoor Command Execution,NSS-55523 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=FTP Supports Clear Text Authentication refs=CWE-522,CWE-523,NSS-34324 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=Anonymous FTP Enabled refs=CVE-1999-0497,OSVDB-69,NSS-10079 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=FTP Supports Clear Text Authentication refs=CWE-522,CWE-523,NSS-34324 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=vsftpd Detection refs=NSS-52703 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=FTP Server Detection refs=NSS-10092 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=FTP Server Detection refs=NSS-10092 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:50 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+search name:vsftpd
+exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03 00:00:00 UTC  excellent  VSFTPD v2.3.4 Backdoor Command Execution
+
+search name:Anonymous FTP
+auxiliary/scanner/ftp/anonymous                   normal  Anonymous FTP Access Detection
+search name:ProFTPD
+NO VALE -- exploit/freebsd/ftp/proftp_telnet_iac   2010-11-01 00:00:00 UTC  great      ProFTPD 1.3.2rc3 - 1.3.3b Telnet IAC Buffer Overflow (FreeBSD)
+NO VALE -- exploit/linux/ftp/proftp_sreplace       2006-11-26 00:00:00 UTC  great      ProFTPD 1.2 - 1.3.0 sreplace Buffer Overflow (Linux)
+NO VALE --exploit/linux/ftp/proftp_telnet_iac     2010-11-01 00:00:00 UTC  great      ProFTPD 1.3.2rc3 - 1.3.3b Telnet IAC Buffer Overflow (Linux)
+exploit/unix/ftp/proftpd_133c_backdoor  2010-12-02 00:00:00 UTC  excellent  ProFTPD-1.3.3c Backdoor Command Execution
+
+search name:WU-FTPD
+NO VALE --exploit/multi/ftp/wuftpd_site_exec_format  2000-06-22 00:00:00 UTC  great  WU-FTPD SITE EXEC/INDEX Format String Vulnerability
+
+Servicio SSH
+vulns -s ssh
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Backported Security Patch Detection (SSH) refs=NSS-39520 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=SSH Protocol Versions Supported refs=NSS-10881 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=Debian OpenSSH/OpenSSL Package Random Number Generator Weakness refs=CVE-2008-0166,BID-29179,OSVDB-45029,CWE-310,NSS-32314 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=SSH Server Type and Version Information refs=NSS-10267 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:50 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+search name:ssh
+auxiliary/fuzzers/ssh/ssh_kexinit_corrupt                            normal     SSH Key Exchange Init Corruption
+auxiliary/fuzzers/ssh/ssh_version_15                                 normal     SSH 1.5 Version Fuzzer
+auxiliary/fuzzers/ssh/ssh_version_2                                  normal     SSH 2.0 Version Fuzzer
+auxiliary/fuzzers/ssh/ssh_version_corrupt                            normal     SSH Version Corruption
+auxiliary/scanner/ssh/ssh_identify_pubkeys                           normal     SSH Public Key Acceptance Scanner
+*auxiliary/scanner/ssh/ssh_login                                      normal     SSH Login Check Scanner
+*auxiliary/scanner/ssh/ssh_login_pubkey                               normal     SSH Public Key Login Scanner
+*auxiliary/scanner/ssh/ssh_version                                    normal     SSH Version Scanner
+exploit/linux/ssh/f5_bigip_known_privkey    2012-06-11 00:00:00 UTC  excellent  F5 BIG-IP SSH Private Key Exposure
+exploit/linux/ssh/symantec_smg_ssh          2012-08-27 00:00:00 UTC  excellent  Symantec Messaging Gateway 9.5 Default SSH Password Vulnerability
+--exploit/windows/ssh/freeftpd_key_exchange   2006-05-12 00:00:00 UTC  average    FreeFTPd 1.0.10 Key Exchange Algorithm String Buffer Overflow
+--exploit/windows/ssh/freesshd_key_exchange   2006-05-12 00:00:00 UTC  average    FreeSSHd 1.0.9 Key Exchange Algorithm String Buffer Overflow
+--exploit/windows/ssh/putty_msg_debug         2002-12-16 00:00:00 UTC  normal     PuTTy.exe <= v0.53 Buffer Overflow
+--exploit/windows/ssh/securecrt_ssh1          2002-07-23 00:00:00 UTC  average    SecureCRT <= 4.0 Beta 2 SSH1 Buffer Overflow
+--exploit/windows/ssh/sysax_ssh_username      2012-02-27 00:00:00 UTC  normal     Sysax 5.53 SSH Username Buffer Overflow
+post/multi/gather/ssh_creds                                          normal     Multi Gather OpenSSH PKI Credentials Collection
+
+Servicio Telnet
+vulns -s telnet
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=Unencrypted Telnet Server refs=NSS-42263 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=Telnet Server Detection refs=NSS-10281 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+No se me ocurre que exploit utilizar
+
+Servicio SMTP
+vulns -s smtp
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=SMTP Service STARTTLS Plaintext Command Injection refs=CVE-2011-0411,CVE-2011-1430,CVE-2011-1431,CVE-2011-1432,CVE-2011-1506,CVE-2011-2165,BID-46767,OSVDB-71020,OSVDB-71021,OSVDB-71854,OSVDB-71946,OSVDB-73251,OSVDB-75014,OSVDB-75256,CERT-555316,NSS-52611 
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=SSL / TLS Renegotiation DoS refs=CVE-2011-1473,BID-48626,OSVDB-73894,NSS-53491 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Session Resume Supported refs=NSS-51891 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Version 2 (v2) Protocol Detection refs=CVE-2005-2969,NSS-20007 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Weak Cipher Suites Supported refs=CWE-327,CWE-326,CWE-753,CWE-803,CWE-720,NSS-26928 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Medium Strength Cipher Suites Supported refs=NSS-42873 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Perfect Forward Secrecy Cipher Suites Supported refs=NSS-57041 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Anonymous Cipher Suites Supported refs=CVE-2007-1858,BID-28482,OSVDB-34882,NSS-31705 
+[*] Time: 2015-04-22 17:10:43 UTC Vuln: host=192.168.1.3 name=SSL Certificate with Wrong Hostname refs=NSS-45411 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Cipher Suites Supported refs=NSS-21643 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Certificate Cannot Be Trusted refs=NSS-51192 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Self-Signed Certificate refs=NSS-57582 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Certificate Expiry refs=NSS-15901 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=OpenSSL Detection refs=NSS-50845 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Certificate commonName Mismatch refs=NSS-45410 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL Certificate Information refs=NSS-10863 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SSL / TLS Versions Supported refs=NSS-56984 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SMTP Service STARTTLS Command Support refs=NSS-42088 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=SMTP Server Detection refs=NSS-10263 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+
+search name:smtp
+
+Matching Modules
+================
+
+   Name                                                    Disclosure Date          Rank       Description
+   ----                                                    ---------------          ----       -----------
+   auxiliary/client/smtp/emailer                                                    normal     Generic Emailer (SMTP)
+   auxiliary/dos/smtp/sendmail_prescan                     2003-09-17 00:00:00 UTC  normal     Sendmail SMTP Address prescan <= 8.12.8 Memory Corruption
+   auxiliary/dos/windows/smtp/ms06_019_exchange            2004-11-12 00:00:00 UTC  normal     MS06-019 Exchange MODPROP Heap Overflow
+   auxiliary/fuzzers/smtp/smtp_fuzzer                                               normal     SMTP Simple Fuzzer
+   auxiliary/scanner/smtp/smtp_enum                                                 normal     SMTP User Enumeration Utility
+   auxiliary/scanner/smtp/smtp_version                                              normal     SMTP Banner Grabber
+   ***auxiliary/server/capture/smtp                                                    normal     Authentication Capture: SMTP
+   exploit/unix/smtp/clamav_milter_blackhole               2007-08-24 00:00:00 UTC  excellent  ClamAV Milter Blackhole-Mode Remote Code Execution
+   exploit/unix/smtp/exim4_string_format                   2010-12-07 00:00:00 UTC  excellent  Exim4 <= 4.69 string_format Function Heap Buffer Overflow
+   exploit/unix/webapp/squirrelmail_pgp_plugin             2007-07-09 00:00:00 UTC  manual     SquirrelMail PGP Plugin command execution (SMTP)
+   exploit/windows/browser/communicrypt_mail_activex       2010-05-19 00:00:00 UTC  great      CommuniCrypt Mail 1.16 SMTP ActiveX Stack Buffer Overflow
+   exploit/windows/email/ms07_017_ani_loadimage_chunksize  2007-03-28 00:00:00 UTC  great      Windows ANI LoadAniIcon() Chunk Size Stack Buffer Overflow (SMTP)
+   exploit/windows/smtp/mailcarrier_smtp_ehlo              2004-10-26 00:00:00 UTC  good       TABS MailCarrier v2.51 SMTP EHLO Overflow
+   exploit/windows/smtp/mercury_cram_md5                   2007-08-18 00:00:00 UTC  great      Mercury Mail SMTP AUTH CRAM-MD5 Buffer Overflow
+   exploit/windows/smtp/ms03_046_exchange2000_xexch50      2003-10-15 00:00:00 UTC  good       MS03-046 Exchange 2000 XEXCH50 Heap Overflow
+   exploit/windows/smtp/njstar_smtp_bof                    2011-10-31 00:00:00 UTC  normal     NJStar Communicator 3.00 MiniSMTP Buffer Overflow
+   exploit/windows/smtp/wmailserver                        2005-07-11 00:00:00 UTC  average    SoftiaCom WMailserver 1.0 Buffer Overflow
+   exploit/windows/smtp/ypops_overflow1                    2004-09-27 00:00:00 UTC  average    YPOPS 0.6 Buffer Overflow
+
+Servicio DNS
+
+vulns -s dns
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=DNS Server hostname.bind Map Hostname Disclosure refs=NSS-35371 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=DNS Server BIND version Directive Remote Version Disclosure refs=OSVDB-23,NSS-10028 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=DNS Server DNSSEC Aware Resolver refs=NSS-35373 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=DNS Server Detection refs=NSS-11002 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=DNS Server Detection refs=NSS-11002 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219
+
+search name:"DNS Server"
+
+Matching Modules
+================
+
+   Name                                                Disclosure Date          Rank    Description
+   ----                                                ---------------          ----    -----------
+   auxiliary/fuzzers/dns/dns_fuzzer                                             normal  DNS and DNSSEC Fuzzer
+   auxiliary/gather/enum_dns                                                    normal  DNS Record Scanner and Enumerator 
+   auxiliary/server/dns/spoofhelper                                             normal  DNS Spoofing Helper Service
+   auxiliary/server/fakedns                                                     normal  Fake DNS Service
+   auxiliary/spoof/dns/bailiwicked_domain              2008-07-21 00:00:00 UTC  normal  DNS BailiWicked Domain Attack
+   auxiliary/spoof/dns/bailiwicked_host                2008-07-21 00:00:00 UTC  normal  DNS BailiWicked Host Attack
+   auxiliary/spoof/dns/compare_results                 2008-07-21 00:00:00 UTC  normal  DNS Lookup Result Comparison
+   exploit/windows/dcerpc/ms07_029_msdns_zonename      2007-04-12 00:00:00 UTC  great   Microsoft DNS RPC Service extractQuotedChar() Overflow (TCP)
+   exploit/windows/dcerpc/ms07_065_msmq                2007-12-11 00:00:00 UTC  good    Microsoft Message Queueing Service DNS Name Path Overflow
+   exploit/windows/smb/ms07_029_msdns_zonename         2007-04-12 00:00:00 UTC  manual  Microsoft DNS RPC Service extractQuotedChar() Overflow (SMB)
+   payload/windows/meterpreter/reverse_tcp_dns                                  normal  Windows Meterpreter (Reflective Injection), Reverse TCP Stager (DNS)
+   payload/windows/patchupmeterpreter/reverse_tcp_dns                           normal  Windows Meterpreter (skape/jt Injection), Reverse TCP Stager (DNS)
+   payload/windows/vncinject/reverse_tcp_dns                                    normal  VNC Server (Reflective Injection), Reverse TCP Stager (DNS)
+
+   
+vulns -s tftp
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=TFTP Daemon Detection refs=NSS-11819 
+
+search name:tftp
+
+Matching Modules
+================
+
+   Name                                              Disclosure Date          Rank       Description
+   ----                                              ---------------          ----       -----------
+   auxiliary/admin/tftp/tftp_transfer_util                                    normal     TFTP File Transfer Utility
+   auxiliary/dos/scada/d20_tftp_overflow             2012-01-19 00:00:00 UTC  normal     General Electric D20ME TFTP Server Buffer Overflow DoS
+   auxiliary/dos/windows/tftp/pt360_write            2008-10-29 00:00:00 UTC  normal     PacketTrap TFTP Server 2.2.5459.0 DoS
+   auxiliary/dos/windows/tftp/solarwinds             2010-05-21 00:00:00 UTC  normal     SolarWinds TFTP Server 10.4.0.10 Denial of Service
+   auxiliary/scanner/snmp/cisco_config_tftp                                   normal     Cisco IOS SNMP Configuration Grabber (TFTP)
+   auxiliary/scanner/snmp/cisco_upload_file                                   normal     Cisco IOS SNMP File Upload (TFTP)
+   auxiliary/scanner/tftp/ipswitch_whatsupgold_tftp  2011-12-12 00:00:00 UTC  normal     IpSwitch WhatsUp Gold TFTP Directory Traversal
+   auxiliary/scanner/tftp/netdecision_tftp           2009-05-16 00:00:00 UTC  normal     NetDecision 4.2 TFTP Directory Traversal
+   auxiliary/scanner/tftp/tftpbrute                                           normal     TFTP Brute Forcer
+   auxiliary/server/tftp                                                      normal     TFTP File Server
+   exploit/windows/ftp/32bitftp_list_reply           2010-10-12 00:00:00 UTC  good       32bit FTP Client Stack Buffer Overflow 
+   exploit/windows/ftp/netterm_netftpd_user          2005-04-26 00:00:00 UTC  great      NetTerm NetFTPD USER Buffer Overflow
+   exploit/windows/ftp/scriptftp_list                2011-10-12 00:00:00 UTC  good       ScriptFTP <= 3.3 Remote Buffer Overflow (LIST)
+   exploit/windows/tftp/attftp_long_filename         2006-11-27 00:00:00 UTC  average    Allied Telesyn TFTP Server 1.9 Long Filename Overflow
+   exploit/windows/tftp/distinct_tftp_traversal      2012-04-08 00:00:00 UTC  excellent  Distinct TFTP 3.10 Writable Directory Traversal Execution
+   exploit/windows/tftp/dlink_long_filename          2007-03-12 00:00:00 UTC  good       D-Link TFTP 1.0 Long Filename Buffer Overflow
+   exploit/windows/tftp/futuresoft_transfermode      2005-05-31 00:00:00 UTC  average    FutureSoft TFTP Server 2000 Transfer-Mode Overflow
+   exploit/windows/tftp/netdecision_tftp_traversal   2009-05-16 00:00:00 UTC  excellent  NetDecision 4.2 TFTP Writable Directory Traversal Execution
+   exploit/windows/tftp/opentftp_error_code          2008-07-05 00:00:00 UTC  average    OpenTFTP SP 1.4 Error Packet Overflow
+   exploit/windows/tftp/quick_tftp_pro_mode          2008-03-27 00:00:00 UTC  good       Quick FTP Pro 2.1 Transfer-Mode Overflow
+   exploit/windows/tftp/tftpd32_long_filename        2002-11-19 00:00:00 UTC  average    TFTPD32 <= 2.21 Long Filename Buffer Overflow
+   exploit/windows/tftp/tftpdwin_long_filename       2006-09-21 00:00:00 UTC  great      TFTPDWIN v0.4.2 Long Filename Buffer Overflow
+   exploit/windows/tftp/tftpserver_wrq_bof           2008-03-26 00:00:00 UTC  normal     TFTP Server for Windows 1.4 ST WRQ Buffer Overflow
+   exploit/windows/tftp/threectftpsvc_long_mode      2006-11-27 00:00:00 UTC  great      3CTftpSvc TFTP Long Mode Buffer Overflow
+   post/windows/gather/credentials/smartftp                                   normal     Windows Gather SmartFTP Saved Password Extraction
+
+
+Servicio WWW
+
+ulns -s www
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Backported Security Patch Detection (WWW) refs=NSS-39521 
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Apache HTTP Server httpOnly Cookie Information Disclosure refs=CVE-2012-0053,BID-51706,OSVDB-78556,EDB-ID-18442,IAVA-2012-A-0017,NSS-57792 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=HyperText Transfer Protocol (HTTP) Information refs=NSS-24260 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=Browsable Web Directories refs=NSS-40984 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=/doc Directory Browsable refs=CVE-1999-0678,BID-318,OSVDB-48,NSS-10056 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=WebDAV Detection refs=NSS-11424 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=HTTP TRACE / TRACK Methods Allowed refs=CVE-2003-1567,CVE-2004-2320,CVE-2010-0386,BID-9506,BID-9561,BID-11604,BID-33374,BID-37995,OSVDB-877,OSVDB-3726,OSVDB-5648,OSVDB-50485,CWE-16,MSF-HTTP Options Detection,NSS-11213 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=HTTP Server Type and Version refs=NSS-10107 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+
+Servicios netbios-ns
+vulns -s netbios-ns
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Windows NetBIOS / SMB Remote Host Information Disclosure refs=NSS-10150 
+
+NADA
+
+Servicio HTTP
+vulns -s http
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Backported Security Patch Detection (WWW) refs=NSS-39521 
+[*] Time: 2015-04-22 17:10:42 UTC Vuln: host=192.168.1.3 name=Apache HTTP Server httpOnly Cookie Information Disclosure refs=CVE-2012-0053,BID-51706,OSVDB-78556,EDB-ID-18442,IAVA-2012-A-0017,NSS-57792 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=HyperText Transfer Protocol (HTTP) Information refs=NSS-24260 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=Browsable Web Directories refs=NSS-40984 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=/doc Directory Browsable refs=CVE-1999-0678,BID-318,OSVDB-48,NSS-10056 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=WebDAV Detection refs=NSS-11424 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=HTTP TRACE / TRACK Methods Allowed refs=CVE-2003-1567,CVE-2004-2320,CVE-2010-0386,BID-9506,BID-9561,BID-11604,BID-33374,BID-37995,OSVDB-877,OSVDB-3726,OSVDB-5648,OSVDB-50485,CWE-16,MSF-HTTP Options Detection,NSS-11213 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=HTTP Server Type and Version refs=NSS-10107 
+[*] Time: 2015-04-22 17:10:48 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:51 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+[*] Time: 2015-04-22 17:48:19 UTC Vuln: host=192.168.1.3 name=Apache Tomcat Manager Application Deployer Authenticated Code Execution refs=CVE-2009-3843,OSVDB-60317,CVE-2009-4189,OSVDB-60670,CVE-2009-4188,BID-38084,CVE-2010-0557,URL-http://www-01.ibm.com/support/docview.wss?uid=swg21419179,CVE-2010-4094,URL-http://www.zerodayinitiative.com/advisories/ZDI-10-214/,CVE-2009-3548,OSVDB-60176,BID-36954,URL-http://tomcat.apache.org/tomcat-5.5-doc/manager-howto.html 
+
+search name:http
+
+Matching Modules
+================
+
+   Name                                                            Disclosure Date          Rank       Description
+   ----                                                            ---------------          ----       -----------
+   auxiliary/admin/http/contentkeeper_fileaccess                                            normal     ContentKeeper Web Appliance mimencode File Access
+   auxiliary/admin/http/hp_web_jetadmin_exec                       2004-04-27 00:00:00 UTC  normal     HP Web JetAdmin 6.5 Server Arbitrary Command Execution
+   auxiliary/admin/http/iis_auth_bypass                            2010-07-02 00:00:00 UTC  normal     MS10-065 Microsoft IIS 5 NTFS Stream Authentication Bypass
+   auxiliary/admin/http/intersil_pass_reset                        2007-09-10 00:00:00 UTC  normal     Intersil (Boa) HTTPd Basic Authentication Password Reset
+   auxiliary/admin/http/iomega_storcenterpro_sessionid                                      normal     Iomega StorCenter Pro NAS Web Authentication Bypass
+   auxiliary/admin/http/jboss_seam_exec                            2010-07-19 00:00:00 UTC  normal     JBoss Seam 2 Remote Command Execution
+   auxiliary/admin/http/scrutinizer_add_user                       2012-07-27 00:00:00 UTC  normal     Plixer Scrutinizer NetFlow and sFlow Analyzer HTTP Authentication Bypass
+   auxiliary/admin/http/tomcat_administration                                               normal     Tomcat Administration Tool Default Access
+   auxiliary/admin/http/tomcat_utf8_traversal                                               normal     Tomcat UTF-8 Directory Traversal Vulnerability
+   auxiliary/admin/http/trendmicro_dlp_traversal                                            normal     TrendMicro Data Loss Prevention 5.5 Directory Traversal
+   auxiliary/admin/http/typo3_sa_2009_001                          2009-01-20 00:00:00 UTC  normal     TYPO3 sa-2009-001 Weak Encryption Key File Disclosure
+   auxiliary/admin/http/typo3_sa_2009_002                          2009-02-10 00:00:00 UTC  normal     Typo3 sa-2009-002 File Disclosure
+   auxiliary/admin/http/typo3_sa_2010_020                                                   normal     TYPO3 sa-2010-020 Remote File Disclosure
+   auxiliary/admin/http/typo3_winstaller_default_enc_keys                                   normal     TYPO3 Winstaller default Encryption Keys
+   auxiliary/dos/cisco/ios_http_percentpercent                     2000-04-26 00:00:00 UTC  normal     Cisco IOS HTTP GET /%% request Denial of Service
+   auxiliary/dos/http/3com_superstack_switch                       2004-06-24 00:00:00 UTC  normal     3Com SuperStack Switch Denial of Service
+   auxiliary/dos/http/apache_mod_isapi                             2010-03-05 00:00:00 UTC  normal     Apache mod_isapi <= 2.2.14 Dangling Pointer
+   auxiliary/dos/http/apache_range_dos                             2011-08-19 00:00:00 UTC  normal     Apache Range header DoS (Apache Killer)
+   auxiliary/dos/http/apache_tomcat_transfer_encoding              2010-07-09 00:00:00 UTC  normal     Apache Tomcat Transfer-Encoding Information Disclosure and DoS
+   auxiliary/dos/http/dell_openmanage_post                         2004-02-26 00:00:00 UTC  normal     Dell OpenManage POST Request Heap Overflow (win32)
+   auxiliary/dos/http/hashcollision_dos                            2011-12-28 00:00:00 UTC  normal     Hashtable Collisions
+   auxiliary/dos/http/sonicwall_ssl_format                         2009-05-29 00:00:00 UTC  normal     SonicWALL SSL-VPN Format String Vulnerability
+   auxiliary/dos/http/webrick_regex                                2008-08-08 00:00:00 UTC  normal     Ruby WEBrick::HTTP::DefaultFileHandler DoS
+   auxiliary/dos/windows/http/ms10_065_ii6_asp_dos                 2010-09-14 00:00:00 UTC  normal     Microsoft IIS 6.0 ASP Stack Exhaustion Denial of Service
+   auxiliary/dos/windows/http/pi3web_isapi                         2008-11-13 00:00:00 UTC  normal     Pi3Web <=2.0.13 ISAPI DoS
+   auxiliary/fuzzers/http/http_form_field                                                   normal     HTTP Form Field Fuzzer
+   auxiliary/fuzzers/http/http_get_uri_long                                                 normal     HTTP GET Request URI Fuzzer (Incrementing Lengths)
+   auxiliary/fuzzers/http/http_get_uri_strings                                              normal     HTTP GET Request URI Fuzzer (Fuzzer Strings)
+   auxiliary/scanner/http/adobe_xml_inject                                                  normal     Adobe XML External Entity Injection
+   auxiliary/scanner/http/apache_userdir_enum                                               normal     Apache "mod_userdir" User Enumeration
+   auxiliary/scanner/http/atlassian_crowd_fileaccess                                        normal     Atlassian Crowd XML Entity Expansion Remote File Access
+   auxiliary/scanner/http/axis_local_file_include                                           normal     Apache Axis2 v1.4.1 Local File Inclusion
+   auxiliary/scanner/http/axis_login                                                        normal     Apache Axis2 v1.4.1 Brute Force Utility
+   auxiliary/scanner/http/backup_file                                                       normal     HTTP Backup File Scanner
+   auxiliary/scanner/http/barracuda_directory_traversal            2010-10-08 00:00:00 UTC  normal     Barracuda Multiple Product "locale" Directory Traversal
+   auxiliary/scanner/http/blind_sql_query                                                   normal     HTTP Blind SQL Injection Scanner
+   auxiliary/scanner/http/brute_dirs                                                        normal     HTTP Directory Brute Force Scanner
+   auxiliary/scanner/http/cert                                                              normal     HTTP SSL Certificate Checker
+   auxiliary/scanner/http/cisco_device_manager                     2000-10-26 00:00:00 UTC  normal     Cisco Device HTTP Device Manager Access
+   auxiliary/scanner/http/cisco_ios_auth_bypass                    2001-06-27 00:00:00 UTC  normal     Cisco IOS HTTP Unauthorized Administrative Access
+   auxiliary/scanner/http/cisco_nac_manager_traversal                                       normal     Cisco Network Access Manager Directory Traversal Vulnerability
+   auxiliary/scanner/http/cold_fusion_version                                               normal     ColdFusion Version Scanner
+   auxiliary/scanner/http/coldfusion_locale_traversal                                       normal     ColdFusion Server Check
+   auxiliary/scanner/http/copy_of_file                                                      normal     HTTP Copy File Scanner
+   auxiliary/scanner/http/crawler                                                           normal     Web Site Crawler
+   auxiliary/scanner/http/dir_listing                                                       normal     HTTP Directory Listing Scanner
+   auxiliary/scanner/http/dir_scanner                                                       normal     HTTP Directory Scanner
+   auxiliary/scanner/http/dir_webdav_unicode_bypass                                         normal     MS09-020 IIS6 WebDAV Unicode Auth Bypass Directory Scanner
+   auxiliary/scanner/http/dolibarr_login                                                    normal     Dolibarr ERP & CRM 3 Login Utility
+   auxiliary/scanner/http/drupal_views_user_enum                   2010-07-02 00:00:00 UTC  normal     Drupal Views Module Users Enumeration
+   auxiliary/scanner/http/ektron_cms400net                                                  normal     Ektron CMS400.NET Default Password Scanner
+   auxiliary/scanner/http/enum_delicious                                                    normal     Del.icio.us Domain Links (URLs) Enumerator
+   auxiliary/scanner/http/enum_wayback                                                      normal     Archive.org Stored Domain URLs
+   auxiliary/scanner/http/error_sql_injection                                               normal     HTTP Error Based SQL Injection Scanner
+   auxiliary/scanner/http/file_same_name_dir                                                normal     HTTP File Same Name Directory Scanner
+   auxiliary/scanner/http/files_dir                                                         normal     HTTP Interesting File Scanner
+   auxiliary/scanner/http/frontpage_login                                                   normal     FrontPage Server Extensions Anonymous Login Scanner
+   auxiliary/scanner/http/glassfish_login                                                   normal     GlassFish Brute Force Utility
+   auxiliary/scanner/http/hp_sitescope_getfileinternal_fileaccess                           normal     HP SiteScope SOAP Call getFileInternal Remote File Access
+   auxiliary/scanner/http/hp_sitescope_getsitescopeconfiguration                            normal     HP SiteScope SOAP Call getSiteScopeConfiguration Configuration Access
+   auxiliary/scanner/http/hp_sitescope_loadfilecontent_fileaccess                           normal     HP SiteScope SOAP Call loadFileContent Remote File Access
+   auxiliary/scanner/http/http_login                                                        normal     HTTP Login Utility
+   auxiliary/scanner/http/http_put                                                          normal     HTTP Writable Path PUT/DELETE File Access
+   auxiliary/scanner/http/http_traversal                                                    normal     Generic HTTP Directory Traversal Utility
+   auxiliary/scanner/http/http_version                                                      normal     HTTP Version Detection
+   auxiliary/scanner/http/httpbl_lookup                                                     normal     Http:BL Lookup
+   auxiliary/scanner/http/iis_internal_ip                                                   normal     Microsoft IIS HTTP Internal IP Disclosure
+   auxiliary/scanner/http/impersonate_ssl                                                   normal     HTTP SSL Certificate Impersonation
+   auxiliary/scanner/http/jboss_vulnscan                                                    normal     JBoss Vulnerability Scanner
+   auxiliary/scanner/http/litespeed_source_disclosure                                       normal     LiteSpeed Source Code Disclosure/Download
+   auxiliary/scanner/http/lucky_punch                                                       normal     HTTP Microsoft SQL Injection Table XSS Infection
+   auxiliary/scanner/http/majordomo2_directory_traversal           2011-03-08 00:00:00 UTC  normal     Majordomo2 _list_file_get() Directory Traversal
+   auxiliary/scanner/http/manageengine_traversal                   2012-03-18 00:00:00 UTC  normal     ManageEngine DeviceExpert 5.6 ScheduleResultViewer FileName Traversal
+   auxiliary/scanner/http/mod_negotiation_brute                                             normal     Apache HTTPD mod_negotiation Filename Bruter
+   auxiliary/scanner/http/mod_negotiation_scanner                                           normal     Apache HTTPD mod_negotiation Scanner
+   auxiliary/scanner/http/ms09_020_webdav_unicode_bypass                                    normal     MS09-020 IIS6 WebDAV Unicode Authentication Bypass
+   auxiliary/scanner/http/netdecision_traversal                    2012-03-07 00:00:00 UTC  normal     NetDecision NOCVision Server Directory Traversal
+   auxiliary/scanner/http/nginx_source_disclosure                                           normal     Nginx Source Code Disclosure/Download
+   auxiliary/scanner/http/open_proxy                                                        normal     HTTP Open Proxy Detection
+   auxiliary/scanner/http/options                                                           normal     HTTP Options Detection
+   auxiliary/scanner/http/owa_login                                                         normal     Outlook Web App (OWA) Brute Force Utility
+   auxiliary/scanner/http/prev_dir_same_name_file                                           normal     HTTP Previous Directory File Scanner
+   auxiliary/scanner/http/rails_mass_assignment                                             normal     Ruby On Rails Attributes Mass Assignment Scanner
+   auxiliary/scanner/http/replace_ext                                                       normal     HTTP File Extension Scanner
+   auxiliary/scanner/http/rewrite_proxy_bypass                                              normal     Apache Reverse Proxy Bypass Vulnerability Scanner
+   auxiliary/scanner/http/robots_txt                                                        normal     HTTP Robots.txt Content Scanner
+   auxiliary/scanner/http/s40_traversal                            2011-04-07 00:00:00 UTC  normal     S40 0.4.2 CMS Directory Traversal Vulnerability
+   auxiliary/scanner/http/sap_businessobjects_user_brute                                    normal     SAP BusinessObjects User Bruteforcer
+   auxiliary/scanner/http/sap_businessobjects_user_brute_web                                normal     SAP BusinessObjects Web User Bruteforcer
+   auxiliary/scanner/http/sap_businessobjects_user_enum                                     normal     SAP BusinessObjects User Enumeration
+   auxiliary/scanner/http/sap_businessobjects_version_enum                                  normal     SAP BusinessObjects Version Detection
+   auxiliary/scanner/http/scraper                                                           normal     HTTP Page Scraper
+   auxiliary/scanner/http/soap_xml                                                          normal     HTTP SOAP Verb/Noun Brute Force Scanner
+   auxiliary/scanner/http/sockso_traversal                         2012-03-14 00:00:00 UTC  normal     Sockso Music Host Server 1.5 Directory Traversal
+   auxiliary/scanner/http/sqlmap                                                            normal     SQLMAP SQL Injection External Module
+   auxiliary/scanner/http/squid_pivot_scanning                                              normal     Squid Proxy Port Scanner
+   auxiliary/scanner/http/squiz_matrix_user_enum                   2011-11-08 00:00:00 UTC  normal     Squiz Matrix User Enumeration Scanner
+   auxiliary/scanner/http/ssl                                                               normal     HTTP SSL Certificate Information
+   auxiliary/scanner/http/svn_scanner                                                       normal     HTTP Subversion Scanner
+   auxiliary/scanner/http/sybase_easerver_traversal                2011-05-25 00:00:00 UTC  normal     Sybase Easerver 6.3 Directory Traversal
+   auxiliary/scanner/http/tomcat_enum                                                       normal     Apache Tomcat User Enumeration
+   auxiliary/scanner/http/tomcat_mgr_login                                                  normal     Tomcat Application Manager Login Utility
+   auxiliary/scanner/http/trace                                                             normal     HTTP TRACE Detection
+   auxiliary/scanner/http/trace_axd                                                         normal     HTTP trace.axd Content Scanner
+   auxiliary/scanner/http/vcms_login                                                        normal     V-CMS Login Utility
+   auxiliary/scanner/http/verb_auth_bypass                                                  normal     HTTP Verb Authentication Bypass Scanner
+   auxiliary/scanner/http/vhost_scanner                                                     normal     HTTP Virtual Host Brute Force Scanner
+   auxiliary/scanner/http/vmware_server_dir_trav                                            normal     VMware Server Directory Traversal Vulnerability
+   auxiliary/scanner/http/vmware_update_manager_traversal          2011-11-21 00:00:00 UTC  normal     VMWare Update Manager 4 Directory Traversal
+   auxiliary/scanner/http/wangkongbao_traversal                                             normal     WANGKONGBAO CNS-1000 and 1100 UTM Directory Traversal
+   auxiliary/scanner/http/web_vulndb                                                        normal     HTTP Vuln Scanner
+   auxiliary/scanner/http/webdav_internal_ip                                                normal     HTTP WebDAV Internal IP Scanner
+   auxiliary/scanner/http/webdav_scanner                                                    normal     HTTP WebDAV Scanner
+   auxiliary/scanner/http/webdav_website_content                                            normal     HTTP WebDAV Website Content Scanner
+   auxiliary/scanner/http/webpagetest_traversal                    2012-07-13 00:00:00 UTC  normal     WebPageTest Directory Traversal
+   auxiliary/scanner/http/wordpress_login_enum                                              normal     Wordpress Brute Force and User Enumeration Utility
+   auxiliary/scanner/http/xpath                                                             normal     HTTP Blind XPATH 1.0 Injector
+   auxiliary/scanner/http/yaws_traversal                           2011-11-25 00:00:00 UTC  normal     Yaws Web Server Directory Traversal
+   auxiliary/scanner/vmware/vmware_http_login                                               normal     VMWare Web Login Scanner
+   auxiliary/server/browser_autopwn                                                         normal     HTTP Client Automatic Exploiter
+   auxiliary/server/capture/http                                                            normal     Authentication Capture: HTTP
+   auxiliary/server/capture/http_basic                                                      normal     HTTP Client Basic Authentication Credential Collector
+   auxiliary/server/capture/http_javascript_keylogger                                       normal     Capture: HTTP JavaScript Keylogger
+   auxiliary/server/capture/http_ntlm                                                       normal     HTTP Client MS Credential Catcher
+   auxiliary/server/http_ntlmrelay                                                          normal     HTTP Client MS Credential Relayer
+   exploit/linux/http/alcatel_omnipcx_mastercgi_exec               2007-09-09 00:00:00 UTC  manual     Alcatel-Lucent OmniPCX Enterprise masterCGI Arbitrary Command Execution
+   exploit/linux/http/ddwrt_cgibin_exec                            2009-07-20 00:00:00 UTC  excellent  DD-WRT HTTP Daemon Arbitrary Command Execution
+   exploit/linux/http/dolibarr_cmd_exec                            2012-04-06 00:00:00 UTC  excellent  Dolibarr ERP & CRM 3 Post-Auth OS Command Injection
+   exploit/linux/http/esva_exec                                    2012-08-16 00:00:00 UTC  excellent  E-Mail Security Virtual Appliance learn-msg.cgi Command Injection
+   exploit/linux/http/gpsd_format_string                           2005-05-25 00:00:00 UTC  average    Berlios GPSD Format String Vulnerability
+   exploit/linux/http/linksys_apply_cgi                            2005-09-13 00:00:00 UTC  great      Linksys WRT54 Access Point apply.cgi Buffer Overflow
+   exploit/linux/http/peercast_url                                 2006-03-08 00:00:00 UTC  average    PeerCast <= 0.1216 URL Handling Buffer Overflow (linux)
+   exploit/linux/http/piranha_passwd_exec                          2000-04-04 00:00:00 UTC  excellent  RedHat Piranha Virtual Server Package passwd.php3 Arbitrary Command Execution
+   exploit/linux/http/symantec_web_gateway_exec                    2012-05-17 00:00:00 UTC  excellent  Symantec Web Gateway 5.0.2.8 ipchange.php Command Injection
+   exploit/linux/http/symantec_web_gateway_file_upload             2012-05-17 00:00:00 UTC  excellent  Symantec Web Gateway 5.0.2.8 Arbitrary PHP File Upload Vulnerability
+   exploit/linux/http/symantec_web_gateway_lfi                     2012-05-17 00:00:00 UTC  excellent  Symantec Web Gateway 5.0.2.8 relfile File Inclusion Vulnerability
+   exploit/linux/http/symantec_web_gateway_pbcontrol               2012-07-23 00:00:00 UTC  excellent  Symantec Web Gateway 5.0.2.18 pbcontrol.php Command Injection
+   exploit/linux/http/vcms_upload                                  2011-11-27 00:00:00 UTC  excellent  V-CMS PHP File Upload and Execute
+   exploit/linux/http/webcalendar_settings_exec                    2012-04-23 00:00:00 UTC  excellent  WebCalendar 1.2.4 Pre-Auth Remote Code Injection
+   exploit/linux/http/webid_converter                              2011-07-05 00:00:00 UTC  excellent  WeBid converter.php Remote PHP Code Injection
+   exploit/linux/http/zenoss_showdaemonxmlconfig_exec              2012-07-30 00:00:00 UTC  good       Zenoss 3 showDaemonXMLConfig Command Execution
+   exploit/multi/http/activecollab_chat                            2012-05-30 00:00:00 UTC  excellent  Active Collab "chat module" <= 2.3.8 Remote PHP Code Injection Exploit
+   exploit/multi/http/apprain_upload_exec                          2012-01-19 00:00:00 UTC  excellent  appRain CMF Arbitrary PHP File Upload Vulnerability
+   exploit/multi/http/axis2_deployer                               2010-12-30 00:00:00 UTC  excellent  Axis2 / SAP BusinessObjects Authenticated Code Execution (via SOAP)
+   exploit/multi/http/cuteflow_upload_exec                         2012-07-27 00:00:00 UTC  excellent  CuteFlow v2.11.2 Arbitrary File Upload Vulnerability
+   exploit/multi/http/familycms_less_exec                          2011-11-29 00:00:00 UTC  excellent  Family Connections less.php Remote Command Execution
+   exploit/multi/http/freenas_exec_raw                             2010-11-06 00:00:00 UTC  great      FreeNAS exec_raw.php Arbitrary Command Execution
+   exploit/multi/http/gitorious_graph                              2012-01-19 00:00:00 UTC  excellent  Gitorious Arbitrary Command Execution
+   exploit/multi/http/glassfish_deployer                           2011-08-04 00:00:00 UTC  excellent  Sun/Oracle GlassFish Server Authenticated Code Execution
+   exploit/multi/http/horde_href_backdoor                          2012-02-13 00:00:00 UTC  excellent  Horde 3.3.12 Backdoor Arbitrary PHP Code Execution
+   exploit/multi/http/jboss_bshdeployer                            2010-04-26 00:00:00 UTC  excellent  JBoss JMX Console Beanshell Deployer WAR Upload and Deployment
+   exploit/multi/http/jboss_deploymentfilerepository               2010-04-26 00:00:00 UTC  excellent  JBoss Java Class DeploymentFileRepository WAR Deployment
+   exploit/multi/http/jboss_invoke_deploy                          2007-02-20 00:00:00 UTC  excellent  JBoss DeploymentFileRepository WAR Deployment (via JMXInvokerServlet)
+   exploit/multi/http/jboss_maindeployer                           2007-02-20 00:00:00 UTC  excellent  JBoss JMX Console Deployer Upload and Execute
+   exploit/multi/http/lcms_php_exec                                2011-03-03 00:00:00 UTC  excellent  LotusCMS 3.0 eval() Remote Command Execution
+   exploit/multi/http/log1cms_ajax_create_folder                   2011-04-11 00:00:00 UTC  excellent  Log1 CMS writeInfo() PHP Code Injection
+   exploit/multi/http/mobilecartly_upload_exec                     2012-08-10 00:00:00 UTC  excellent  MobileCartly 1.0 Arbitrary File Creation Vulnerability
+   exploit/multi/http/op5_license                                  2012-01-05 00:00:00 UTC  excellent  OP5 license.php Remote Command Execution
+   exploit/multi/http/op5_welcome                                  2012-01-05 00:00:00 UTC  excellent  OP5 welcome Remote Command Execution
+   exploit/multi/http/openfire_auth_bypass                         2008-11-10 00:00:00 UTC  excellent  Openfire Admin Console Authentication Bypass
+   exploit/multi/http/php_cgi_arg_injection                        2012-05-03 00:00:00 UTC  excellent  PHP CGI Argument Injection
+   exploit/multi/http/php_volunteer_upload_exec                    2012-05-28 00:00:00 UTC  excellent  PHP Volunteer Management System v1.0.2 Arbitrary File Upload Vulnerability
+   exploit/multi/http/phpldapadmin_query_engine                    2011-10-24 00:00:00 UTC  excellent  phpLDAPadmin <= 1.2.1.1 (query_engine) Remote PHP Code Injection
+   exploit/multi/http/phpscheduleit_start_date                     2008-10-01 00:00:00 UTC  excellent  phpScheduleIt PHP reserve.php start_date Parameter Arbitrary Code Injection
+   exploit/multi/http/plone_popen2                                 2011-10-04 00:00:00 UTC  excellent  Plone and Zope XMLTools Remote Command Execution
+   exploit/multi/http/pmwiki_pagelist                              2011-11-09 00:00:00 UTC  excellent  PmWiki <= 2.2.34 pagelist.php Remote PHP Code Injection Exploit
+   exploit/multi/http/sit_file_upload                              2011-11-10 00:00:00 UTC  excellent  Support Incident Tracker <= 3.65 Remote Command Execution
+   exploit/multi/http/snortreport_exec                             2011-09-19 00:00:00 UTC  excellent  Snortreport nmap.php/nbtscan.php Remote Command Execution
+   exploit/multi/http/splunk_mappy_exec                            2011-12-12 00:00:00 UTC  excellent  Splunk Search Remote Code Execution
+   exploit/multi/http/spree_search_exec                            2011-10-05 00:00:00 UTC  excellent  Spreecommerce 0.60.1 Arbitrary Command Execution
+   exploit/multi/http/spree_searchlogic_exec                       2011-04-19 00:00:00 UTC  excellent  Spreecommerce < 0.50.0 Arbitrary Command Execution
+   exploit/multi/http/struts_code_exec                             2010-07-13 00:00:00 UTC  excellent  Apache Struts < 2.2.0 Remote Command Execution
+   exploit/multi/http/struts_code_exec_exception_delegator         2012-01-06 00:00:00 UTC  excellent  Apache Struts <= 2.2.1.1 Remote Command Execution
+   exploit/multi/http/sun_jsws_dav_options                         2010-01-20 00:00:00 UTC  great      Sun Java System Web Server WebDAV OPTIONS Buffer Overflow
+   exploit/multi/http/testlink_upload_exec                         2012-08-13 00:00:00 UTC  excellent  TestLink v1.9.3 Arbitrary File Upload Vulnerability
+   exploit/multi/http/tomcat_mgr_deploy                            2009-11-09 00:00:00 UTC  excellent  Apache Tomcat Manager Application Deployer Authenticated Code Execution
+   exploit/multi/http/traq_plugin_exec                             2011-12-12 00:00:00 UTC  excellent  Traq admincp/common.php Remote Code Execution
+   exploit/multi/http/vbseo_proc_deutf                             2012-01-23 00:00:00 UTC  excellent  vBSEO <= 3.6.0 proc_deutf() Remote PHP Code Injection
+   exploit/multi/http/webpagetest_upload_exec                      2012-07-13 00:00:00 UTC  excellent  WebPageTest Arbitrary PHP File Upload
+   exploit/multi/http/wikka_spam_exec                              2011-11-30 00:00:00 UTC  excellent  WikkaWiki 1.3.2 Spam Logging PHP Injection
+   exploit/osx/http/evocam_webserver                               2010-06-01 00:00:00 UTC  average    MacOS X EvoCam HTTP GET Buffer Overflow
+   exploit/unix/http/contentkeeperweb_mimencode                    2009-02-25 00:00:00 UTC  excellent  ContentKeeper Web Remote Command Execution
+   exploit/unix/http/ctek_skyrouter                                2011-09-08 00:00:00 UTC  average    CTEK SkyRouter 4200 and 4300 Command Execution
+   exploit/unix/http/freepbx_callmenum                             2012-03-20 00:00:00 UTC  manual     FreePBX 2.10.0 / 2.9.0 callmenum Remote Code Execution
+   exploit/unix/http/lifesize_room                                 2011-07-13 00:00:00 UTC  excellent  LifeSize Room Command Injection
+   exploit/windows/browser/ms06_071_xml_core                       2006-10-10 00:00:00 UTC  normal     Internet Explorer XML Core Services HTTP Request Handling
+   exploit/windows/browser/ms07_017_ani_loadimage_chunksize        2007-03-28 00:00:00 UTC  great      Windows ANI LoadAniIcon() Chunk Size Stack Buffer Overflow (HTTP)
+   exploit/windows/browser/persits_xupload_traversal               2009-09-29 00:00:00 UTC  excellent  Persits XUpload ActiveX MakeHttpRequest Directory Traversal
+   exploit/windows/browser/ultraoffice_httpupload                  2008-08-27 00:00:00 UTC  good       Ultra Shareware Office Control ActiveX HttpUpload Buffer Overflow
+   exploit/windows/ftp/httpdx_tolog_format                         2009-11-17 00:00:00 UTC  great      HTTPDX tolog() Function Format String Vulnerability
+   exploit/windows/http/adobe_robohelper_authbypass                2009-09-23 00:00:00 UTC  excellent  Adobe RoboHelp Server 8 Arbitrary File Upload and Execute
+   exploit/windows/http/altn_securitygateway                       2008-06-02 00:00:00 UTC  average    Alt-N SecurityGateway username Buffer Overflow
+   exploit/windows/http/altn_webadmin                              2003-06-24 00:00:00 UTC  average    Alt-N WebAdmin USER Buffer Overflow
+   exploit/windows/http/amlibweb_webquerydll_app                   2010-08-03 00:00:00 UTC  normal     Amlibweb NetOpacs webquery.dll Stack Buffer Overflow
+   exploit/windows/http/apache_chunked                             2002-06-19 00:00:00 UTC  good       Apache Win32 Chunked Encoding
+   exploit/windows/http/apache_mod_rewrite_ldap                    2006-07-28 00:00:00 UTC  great      Apache module mod_rewrite LDAP protocol Buffer Overflow
+   exploit/windows/http/apache_modjk_overflow                      2007-03-02 00:00:00 UTC  great      Apache mod_jk 1.2.20 Buffer Overflow
+   exploit/windows/http/badblue_ext_overflow                       2003-04-20 00:00:00 UTC  great      BadBlue 2.5 EXT.dll Buffer Overflow
+   exploit/windows/http/badblue_passthru                           2007-12-10 00:00:00 UTC  great      BadBlue 2.72b PassThru Buffer Overflow
+   exploit/windows/http/bea_weblogic_jsessionid                    2009-01-13 00:00:00 UTC  good       BEA WebLogic JSESSIONID Cookie Value Overflow
+   exploit/windows/http/bea_weblogic_post_bof                      2008-07-17 00:00:00 UTC  great      Oracle Weblogic Apache Connector POST Request Buffer Overflow
+   exploit/windows/http/bea_weblogic_transfer_encoding             2008-09-09 00:00:00 UTC  great      BEA Weblogic Transfer-Encoding Buffer Overflow
+   exploit/windows/http/belkin_bulldog                             2009-03-08 00:00:00 UTC  average    Belkin Bulldog Plus Web Service Buffer Overflow
+   exploit/windows/http/ca_arcserve_rpc_authbypass                 2011-07-25 00:00:00 UTC  excellent  CA Arcserve D2D GWT RPC Credential Information Disclosure
+   exploit/windows/http/ca_igateway_debug                          2005-10-06 00:00:00 UTC  average    CA iTechnology iGateway Debug Mode Buffer Overflow
+   exploit/windows/http/ca_totaldefense_regeneratereports          2011-04-13 00:00:00 UTC  excellent  CA Total Defense Suite reGenerateReports Stored Procedure SQL Injection
+   exploit/windows/http/coldfusion_fckeditor                       2009-07-03 00:00:00 UTC  excellent  ColdFusion 8.0.1 Arbitrary File Upload and Execute
+   exploit/windows/http/cyclope_ess_sqli                           2012-08-08 00:00:00 UTC  excellent  Cyclope Employee Surveillance Solution v6 SQL Injection
+   exploit/windows/http/easyftp_list                               2010-02-18 00:00:00 UTC  great      EasyFTP Server <= 1.7.0.11 list.html path Stack Buffer Overflow
+   exploit/windows/http/edirectory_host                            2006-10-21 00:00:00 UTC  great      Novell eDirectory NDS Server Host Header Overflow
+   exploit/windows/http/edirectory_imonitor                        2005-08-11 00:00:00 UTC  great      eDirectory 8.7.3 iMonitor Remote Stack Buffer Overflow
+   exploit/windows/http/efs_easychatserver_username                2007-08-14 00:00:00 UTC  great      EFS Easy Chat Server Authentication Request Handling Buffer Overflow
+   exploit/windows/http/ezserver_http                              2012-06-18 00:00:00 UTC  excellent  EZHomeTech EzServer <= 6.4.017 Stack Buffer Overflow Vulnerability
+   exploit/windows/http/fdm_auth_header                            2009-02-02 00:00:00 UTC  great      Free Download Manager Remote Control Server Buffer Overflow
+   exploit/windows/http/hp_nnm_getnnmdata_hostname                 2010-05-11 00:00:00 UTC  great      HP OpenView Network Node Manager getnnmdata.exe (Hostname) CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_getnnmdata_icount                   2010-05-11 00:00:00 UTC  great      HP OpenView Network Node Manager getnnmdata.exe (ICount) CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_getnnmdata_maxage                   2010-05-11 00:00:00 UTC  great      HP OpenView Network Node Manager getnnmdata.exe (MaxAge) CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_nnmrptconfig_nameparams             2011-01-10 00:00:00 UTC  normal     HP OpenView NNM nnmRptConfig nameParams Buffer Overflow
+   exploit/windows/http/hp_nnm_nnmrptconfig_schdparams             2011-01-10 00:00:00 UTC  normal     HP OpenView NNM nnmRptConfig.exe schdParams Buffer Overflow
+   exploit/windows/http/hp_nnm_openview5                           2007-12-06 00:00:00 UTC  great      HP OpenView Network Node Manager OpenView5.exe CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_ovalarm_lang                        2009-12-09 00:00:00 UTC  great      HP OpenView Network Node Manager ovalarm.exe CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_ovas                                2008-04-02 00:00:00 UTC  good       HP OpenView NNM 7.53, 7.51 OVAS.EXE Pre-Authentication Stack Buffer Overflow
+   exploit/windows/http/hp_nnm_ovbuildpath_textfile                2011-11-01 00:00:00 UTC  normal     HP OpenView Network Node Manager ov.dll _OVBuildPath Buffer Overflow
+   exploit/windows/http/hp_nnm_ovwebhelp                           2009-12-09 00:00:00 UTC  great      HP OpenView Network Node Manager OvWebHelp.exe CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_ovwebsnmpsrv_main                   2010-06-16 00:00:00 UTC  great      HP OpenView Network Node Manager ovwebsnmpsrv.exe main Buffer Overflow
+   exploit/windows/http/hp_nnm_ovwebsnmpsrv_ovutil                 2010-06-16 00:00:00 UTC  great      HP OpenView Network Node Manager ovwebsnmpsrv.exe ovutil Buffer Overflow
+   exploit/windows/http/hp_nnm_ovwebsnmpsrv_uro                    2010-06-08 00:00:00 UTC  great      HP OpenView Network Node Manager ovwebsnmpsrv.exe Unrecognized Option Buffer Overflow
+   exploit/windows/http/hp_nnm_snmp                                2009-12-09 00:00:00 UTC  great      HP OpenView Network Node Manager Snmp.exe CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_snmpviewer_actapp                   2010-05-11 00:00:00 UTC  great      HP OpenView Network Node Manager snmpviewer.exe Buffer Overflow
+   exploit/windows/http/hp_nnm_toolbar_01                          2009-01-07 00:00:00 UTC  great      HP OpenView Network Node Manager Toolbar.exe CGI Buffer Overflow
+   exploit/windows/http/hp_nnm_toolbar_02                          2009-01-21 00:00:00 UTC  normal     HP OpenView Network Node Manager Toolbar.exe CGI Cookie Handling Buffer Overflow
+   exploit/windows/http/hp_nnm_webappmon_execvp                    2010-07-20 00:00:00 UTC  great      HP OpenView Network Node Manager execvp_nc Buffer Overflow
+   exploit/windows/http/hp_nnm_webappmon_ovjavalocale              2010-08-03 00:00:00 UTC  great      HP NNM CGI webappmon.exe OvJavaLocale Buffer Overflow
+   exploit/windows/http/hp_openview_insight_backdoor               2011-01-31 00:00:00 UTC  excellent  HP OpenView Performance Insight Server Backdoor Account Code Execution
+   exploit/windows/http/hp_power_manager_filename                  2011-10-19 00:00:00 UTC  normal     HP Power Manager 'formExportDataLogs' Buffer Overflow
+   exploit/windows/http/hp_power_manager_login                     2009-11-04 00:00:00 UTC  average    Hewlett-Packard Power Manager Administration Buffer Overflow
+   exploit/windows/http/hp_sitescope_uploadfileshandler            2012-08-29 00:00:00 UTC  excellent  HP SiteScope Remote Code Execution
+   exploit/windows/http/httpdx_handlepeer                          2009-10-08 00:00:00 UTC  great      HTTPDX h_handlepeer() Function Buffer Overflow
+   exploit/windows/http/httpdx_tolog_format                        2009-11-17 00:00:00 UTC  great      HTTPDX tolog() Function Format String Vulnerability
+   exploit/windows/http/ia_webmail                                 2003-11-03 00:00:00 UTC  average    IA WebMail 3.x Buffer Overflow
+   exploit/windows/http/ibm_tivoli_endpoint_bof                    2011-05-31 00:00:00 UTC  good       IBM Tivoli Endpoint Manager POST Query Buffer Overflow
+   exploit/windows/http/ibm_tpmfosd_overflow                       2007-05-02 00:00:00 UTC  good       IBM TPM for OS Deployment 5.1.0.x rembo.exe Buffer Overflow
+   exploit/windows/http/ibm_tsm_cad_header                         2007-09-24 00:00:00 UTC  good       IBM Tivoli Storage Manager Express CAD Service Buffer Overflow
+   exploit/windows/http/icecast_header                             2004-09-28 00:00:00 UTC  great      Icecast (<= 2.0.1) Header Overwrite (win32)
+   exploit/windows/http/integard_password_bof                      2010-09-07 00:00:00 UTC  great      Race River Integard Home/Pro LoginAdmin Password Stack Buffer Overflow
+   exploit/windows/http/intersystems_cache                         2009-09-29 00:00:00 UTC  great      InterSystems Cache UtilConfigHome.csp Argument Buffer Overflow
+   exploit/windows/http/ipswitch_wug_maincfgret                    2004-08-25 00:00:00 UTC  great      Ipswitch WhatsUp Gold 8.03 Buffer Overflow
+   exploit/windows/http/kolibri_http                               2010-12-26 00:00:00 UTC  good       Kolibri <= v2.0 HTTP Server HEAD Buffer Overflow
+   exploit/windows/http/landesk_thinkmanagement_upload_asp         2012-02-15 00:00:00 UTC  excellent  LANDesk Lenovo ThinkManagement Console Remote Command Execution
+   exploit/windows/http/mailenable_auth_header                     2005-04-24 00:00:00 UTC  great      MailEnable Authorization Header Buffer Overflow
+   exploit/windows/http/manageengine_apps_mngr                     2011-04-08 00:00:00 UTC  average    ManageEngine Applications Manager Authenticated Code Execution
+   exploit/windows/http/maxdb_webdbm_database                      2006-08-29 00:00:00 UTC  good       MaxDB WebDBM Database Parameter Overflow
+   exploit/windows/http/maxdb_webdbm_get_overflow                  2005-04-26 00:00:00 UTC  good       MaxDB WebDBM GET Buffer Overflow
+   exploit/windows/http/mcafee_epolicy_source                      2006-07-17 00:00:00 UTC  average    McAfee ePolicy Orchestrator / ProtectionPilot Overflow
+   exploit/windows/http/mdaemon_worldclient_form2raw               2003-12-29 00:00:00 UTC  great      MDaemon <= 6.8.5 WorldClient form2raw.cgi Stack Buffer Overflow
+   exploit/windows/http/minishare_get_overflow                     2004-11-07 00:00:00 UTC  average    Minishare 1.4.1 Buffer Overflow
+   exploit/windows/http/navicopa_get_overflow                      2006-09-28 00:00:00 UTC  great      NaviCOPA 2.0.1 URL Handling Buffer Overflow
+   exploit/windows/http/netdecision_http_bof                       2012-02-24 00:00:00 UTC  normal     NetDecision 4.5.1 HTTP Server Buffer Overflow
+   exploit/windows/http/novell_imanager_upload                     2010-10-01 00:00:00 UTC  excellent  Novell iManager getMultiPartParameters Arbitrary File Upload
+   exploit/windows/http/novell_messenger_acceptlang                2006-04-13 00:00:00 UTC  average    Novell Messenger Server 2.0 Accept-Language Overflow
+   exploit/windows/http/nowsms                                     2008-02-19 00:00:00 UTC  good       Now SMS/MMS Gateway Buffer Overflow
+   exploit/windows/http/oracle9i_xdb_pass                          2003-08-18 00:00:00 UTC  great      Oracle 9i XDB HTTP PASS Overflow (win32)
+   exploit/windows/http/osb_uname_jlist                            2010-07-13 00:00:00 UTC  excellent  Oracle Secure Backup Authentication Bypass/Command Injection Vulnerability
+   exploit/windows/http/peercast_url                               2006-03-08 00:00:00 UTC  average    PeerCast <= 0.1216 URL Handling Buffer Overflow (win32)
+   exploit/windows/http/php_apache_request_headers_bof             2012-05-08 00:00:00 UTC  normal     PHP apache_request_headers Function Buffer Overflow
+   exploit/windows/http/privatewire_gateway                        2006-06-26 00:00:00 UTC  average    Private Wire Gateway Buffer Overflow
+   exploit/windows/http/psoproxy91_overflow                        2004-02-20 00:00:00 UTC  average    PSO Proxy v0.91 Stack Buffer Overflow
+   exploit/windows/http/rabidhamster_r4_log                        2012-02-09 00:00:00 UTC  normal     RabidHamster R4 Log Entry sprintf() Buffer Overflow
+   exploit/windows/http/sambar6_search_results                     2003-06-21 00:00:00 UTC  normal     Sambar 6 Search Results Buffer Overflow
+   exploit/windows/http/sap_host_control_cmd_exec                  2012-08-14 00:00:00 UTC  average    SAP NetWeaver HostControl Command Injection
+   exploit/windows/http/sap_mgmt_con_osexec_payload                2011-03-08 00:00:00 UTC  excellent  SAP Management Console OSExecute Payload Execution
+   exploit/windows/http/sapdb_webtools                             2007-07-05 00:00:00 UTC  great      SAP DB 7.4 WebTools Buffer Overflow
+   exploit/windows/http/savant_31_overflow                         2002-09-10 00:00:00 UTC  great      Savant 3.1 Web Server Overflow
+   exploit/windows/http/servu_session_cookie                       2009-11-01 00:00:00 UTC  good       Rhinosoft Serv-U Session Cookie Buffer Overflow
+   exploit/windows/http/shoutcast_format                           2004-12-23 00:00:00 UTC  average    SHOUTcast DNAS/win32 1.9.4 File Request Format String Overflow
+   exploit/windows/http/shttpd_post                                2006-10-06 00:00:00 UTC  average    SHTTPD <= 1.34 URI-Encoded POST Request Overflow (win32)
+   exploit/windows/http/solarwinds_storage_manager_sql             2011-12-07 00:00:00 UTC  excellent  Solarwinds Storage Manager 5.1.0 SQL Injection
+   exploit/windows/http/sonicwall_scrutinizer_sqli                 2012-07-22 00:00:00 UTC  excellent  Dell SonicWALL (Plixer) Scrutinizer 9 SQL Injection
+   exploit/windows/http/steamcast_useragent                        2008-01-24 00:00:00 UTC  average    Streamcast <= 0.9.75 HTTP User-Agent Buffer Overflow
+   exploit/windows/http/sws_connection_bof                         2012-07-20 00:00:00 UTC  normal     Simple Web Server Connection Header Buffer Overflow
+   exploit/windows/http/sybase_easerver                            2005-07-25 00:00:00 UTC  average    Sybase EAServer 5.2 Remote Stack Buffer Overflow
+   exploit/windows/http/sysax_create_folder                        2012-07-29 00:00:00 UTC  normal     Sysax Multi Server 5.64 Create Folder Buffer Overflow
+   exploit/windows/http/trackercam_phparg_overflow                 2005-02-18 00:00:00 UTC  average    TrackerCam PHP Argument Buffer Overflow
+   exploit/windows/http/trendmicro_officescan                      2007-06-28 00:00:00 UTC  good       Trend Micro OfficeScan Remote Stack Buffer Overflow
+   exploit/windows/http/umbraco_upload_aspx                        2012-06-28 00:00:00 UTC  excellent  Umbraco CMS Remote Command Execution
+   exploit/windows/http/webster_http                               2002-12-02 00:00:00 UTC  average    Webster HTTP Server GET Buffer Overflow
+   exploit/windows/http/xampp_webdav_upload_php                    2012-01-14 00:00:00 UTC  excellent  XAMPP WebDAV PHP Upload
+   exploit/windows/http/xitami_if_mod_since                        2007-09-24 00:00:00 UTC  average    Xitami 2.5c2 Web Server If-Modified-Since Overflow
+   exploit/windows/http/zenworks_assetmgmt_uploadservlet           2011-11-02 00:00:00 UTC  excellent  Novell ZENworks Asset Management Remote Execution
+   exploit/windows/http/zenworks_uploadservlet                     2010-03-30 00:00:00 UTC  excellent  Novell ZENworks Configuration Management Remote Execution
+   exploit/windows/lotus/domino_http_accept_language               2008-05-20 00:00:00 UTC  average    IBM Lotus Domino Web Server Accept-Language Stack Buffer Overflow
+   exploit/windows/proxy/proxypro_http_get                         2004-02-23 00:00:00 UTC  great      Proxy-Pro Professional GateKeeper 4.7 GET Request Overflow
+   exploit/windows/vnc/winvnc_http_get                             2001-01-29 00:00:00 UTC  average    WinVNC Web Server <= v3.3.3r7 GET Overflow
+   payload/java/meterpreter/reverse_http                                                    normal     Java Meterpreter, Java Reverse HTTP Stager
+   payload/java/meterpreter/reverse_https                                                   normal     Java Meterpreter, Java Reverse HTTPS Stager
+   payload/windows/dllinject/reverse_http                                                   normal     Reflective DLL Injection, Reverse HTTP Stager
+   payload/windows/dllinject/reverse_ipv6_http                                              normal     Reflective DLL Injection, Reverse HTTP Stager (IPv6)
+   payload/windows/download_exec_https                                                      normal     Windows Executable Download (http,https,ftp) and Execute
+   payload/windows/meterpreter/reverse_http                                                 normal     Windows Meterpreter (Reflective Injection), Reverse HTTP Stager
+   payload/windows/meterpreter/reverse_https                                                normal     Windows Meterpreter (Reflective Injection), Reverse HTTPS Stager
+   payload/windows/meterpreter/reverse_ipv6_http                                            normal     Windows Meterpreter (Reflective Injection), Reverse HTTP Stager (IPv6)
+   payload/windows/meterpreter/reverse_ipv6_https                                           normal     Windows Meterpreter (Reflective Injection), Reverse HTTPS Stager (IPv6)
+   payload/windows/shell/reverse_http                                                       normal     Windows Command Shell, Reverse HTTP Stager
+   payload/windows/shell/reverse_ipv6_http                                                  normal     Windows Command Shell, Reverse HTTP Stager (IPv6)
+   payload/windows/upexec/reverse_http                                                      normal     Windows Upload/Execute, Reverse HTTP Stager
+   payload/windows/upexec/reverse_ipv6_http                                                 normal     Windows Upload/Execute, Reverse HTTP Stager (IPv6)
+   payload/windows/vncinject/reverse_http                                                   normal     VNC Server (Reflective Injection), Reverse HTTP Stager
+   payload/windows/vncinject/reverse_ipv6_http                                              normal     VNC Server (Reflective Injection), Reverse HTTP Stager (IPv6)
+
+Servicio MYSQL
+
+vulns -s mysql
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=MySQL Server Detection refs=NSS-10719 
+[*] Time: 2015-04-22 17:10:45 UTC Vuln: host=192.168.1.3 name=MySQL Unpassworded Account Check refs=CVE-2002-1809,CVE-2004-1532,BID-11704,OSVDB-380,OSVDB-16026,NSS-10481 
+[*] Time: 2015-04-22 17:10:46 UTC Vuln: host=192.168.1.3 name=Service Detection (HELP Request) refs=NSS-11153 
+[*] Time: 2015-04-22 17:10:50 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+
+search name:mysql
+
+Matching Modules
+================
+
+   Name                                               Disclosure Date          Rank       Description
+   ----                                               ---------------          ----       -----------
+   auxiliary/admin/mysql/mysql_enum                                            normal     MySQL Enumeration Module
+   auxiliary/admin/mysql/mysql_sql                                             normal     MySQL SQL Generic Query
+   auxiliary/analyze/jtr_mysql_fast                                            normal     John the Ripper MySQL Password Cracker (Fast Mode)
+   auxiliary/scanner/mysql/mysql_authbypass_hashdump  2012-06-09 00:00:00 UTC  normal     MySQL Authentication Bypass Password Dump
+   auxiliary/scanner/mysql/mysql_hashdump                                      normal     MYSQL Password Hashdump
+   auxiliary/scanner/mysql/mysql_login                                         normal     MySQL Login Utility
+   auxiliary/scanner/mysql/mysql_schemadump                                    normal     MYSQL Schema Dump
+   auxiliary/scanner/mysql/mysql_version                                       normal     MySQL Server Version Enumeration
+   auxiliary/server/capture/mysql                                              normal     Authentication Capture: MySQL
+   exploit/linux/mysql/mysql_yassl_getname            2010-01-25 00:00:00 UTC  good       MySQL yaSSL CertDecoder::GetName Buffer Overflow
+   exploit/linux/mysql/mysql_yassl_hello              2008-01-04 00:00:00 UTC  good       MySQL yaSSL SSL Hello Message Buffer Overflow
+   exploit/windows/mysql/mysql_payload                2009-01-16 00:00:00 UTC  excellent  Oracle MySQL for Microsoft Windows Payload Execution
+   exploit/windows/mysql/mysql_yassl_hello            2008-01-04 00:00:00 UTC  average    MySQL yaSSL SSL Hello Message Buffer Overflow
+   exploit/windows/mysql/scrutinizer_upload_exec      2012-07-27 00:00:00 UTC  excellent  Plixer Scrutinizer NetFlow and sFlow Analyzer 9 Default MySQL Credential
+
+
+   Servicio VNC:
+   vulns -s vnc
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=VNC Server 'password' Password refs=NSS-61708 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=VNC Server Security Type Detection refs=NSS-19288 
+[*] Time: 2015-04-22 17:10:44 UTC Vuln: host=192.168.1.3 name=VNC Software Detection refs=NSS-10342 
+[*] Time: 2015-04-22 17:10:47 UTC Vuln: host=192.168.1.3 name=Service Detection refs=NSS-22964 
+[*] Time: 2015-04-22 17:10:50 UTC Vuln: host=192.168.1.3 name=Nessus SYN scanner refs=NSS-11219 
+   
+   search name:vnc
+   
+      Name                                            Disclosure Date          Rank     Description
+   ----                                            ---------------          ----     -----------
+   auxiliary/admin/vnc/realvnc_41_bypass           2006-05-15 00:00:00 UTC  normal   RealVNC NULL Authentication Mode Bypass
+   *sauxiliary/scanner/vnc/vnc_login                                          normal   VNC Authentication Scanner
+   auxiliary/scanner/vnc/vnc_none_auth                                      normal   VNC Authentication None Detection
+   auxiliary/server/capture/vnc                                             normal   Authentication Capture: VNC
+   exploit/windows/vnc/realvnc_client              2001-01-29 00:00:00 UTC  normal   RealVNC 3.3.7 Client Buffer Overflow
+   exploit/windows/vnc/ultravnc_client             2006-04-04 00:00:00 UTC  normal   UltraVNC 1.0.1 Client Buffer Overflow
+   exploit/windows/vnc/ultravnc_viewer_bof         2008-02-06 00:00:00 UTC  normal   UltraVNC 1.0.2 Client (vncviewer.exe) Buffer Overflow
+   exploit/windows/vnc/winvnc_http_get             2001-01-29 00:00:00 UTC  average  WinVNC Web Server <= v3.3.3r7 GET Overflow
+   payload/windows/vncinject/bind_ipv6_tcp                                  normal   VNC Server (Reflective Injection), Bind TCP Stager (IPv6)
+   payload/windows/vncinject/bind_nonx_tcp                                  normal   VNC Server (Reflective Injection), Bind TCP Stager (No NX or Win7)
+   payload/windows/vncinject/bind_tcp                                       normal   VNC Server (Reflective Injection), Bind TCP Stager
+   payload/windows/vncinject/find_tag                                       normal   VNC Server (Reflective Injection), Find Tag Ordinal Stager
+   payload/windows/vncinject/reverse_http                                   normal   VNC Server (Reflective Injection), Reverse HTTP Stager
+   payload/windows/vncinject/reverse_ipv6_http                              normal   VNC Server (Reflective Injection), Reverse HTTP Stager (IPv6)
+   payload/windows/vncinject/reverse_ipv6_tcp                               normal   VNC Server (Reflective Injection), Reverse TCP Stager (IPv6)
+   payload/windows/vncinject/reverse_nonx_tcp                               normal   VNC Server (Reflective Injection), Reverse TCP Stager (No NX or Win7)
+   payload/windows/vncinject/reverse_ord_tcp                                normal   VNC Server (Reflective Injection), Reverse Ordinal TCP Stager (No NX or Win7)
+   payload/windows/vncinject/reverse_tcp                                    normal   VNC Server (Reflective Injection), Reverse TCP Stager
+   payload/windows/vncinject/reverse_tcp_allports                           normal   VNC Server (Reflective Injection), Reverse All-Port TCP Stager
+   payload/windows/vncinject/reverse_tcp_dns                                normal   VNC Server (Reflective Injection), Reverse TCP Stager (DNS)
+   payload/windows/x64/vncinject/bind_tcp                                   normal   Windows x64 VNC Server (Reflective Injection), Windows x64 Bind TCP Stager
+   payload/windows/x64/vncinject/reverse_tcp                                normal   Windows x64 VNC Server (Reflective Injection), Windows x64 Reverse TCP Stager
+   post/osx/gather/enum_chicken_vnc_profile                                 normal   OS X Gather Chicken of the VNC Profile
+   post/windows/gather/credentials/vnc                                      normal   Windows Gather VNC Password Extraction

